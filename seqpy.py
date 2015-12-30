@@ -1,4 +1,5 @@
 from collections import Sequence
+from functools import partial
 
 
 class ExpandingSequence(Sequence):
@@ -40,11 +41,25 @@ def get_squares():
         found .append(candidate)
         candidate +=1
 
+
+def get_powers(n):
+    "Arbitrary powers numbers"
+    candidate = 0
+    found = []
+    while True:
+        yield  candidate**n
+        found .append(candidate)
+        candidate +=1
+
 primes = ExpandingSequence(get_primes())
 squares = ExpandingSequence(get_squares())
 
 
-print squares[0]
-print squares[1]
-print squares[2]
-print squares.seq()
+def powers(n):
+    return ExpandingSequence(get_powers(n))
+
+
+print powers(2)[3]
+#print powers(2)[1]
+#print powers(2)[2]
+#print powers(2).seq
