@@ -1,89 +1,70 @@
 from collections import Sequence
 
 class ExpandingSequence(Sequence):
-	"""A container class to add methods to the generator functions belo.
+	"""A container class to add methods to the generator functions.
 
-    :param Sequence: a function that acts as a generator
+    :param name: Sequence
+    :type name: a function that acts as a generator
     
     :Example:
     
-    The following example constructs an object called primes that will
-    generate the prime numbers. See ducumentation on primes for examples
-    of how to use it.
+    The following example uses a wrapper function primes() to construct
+    an object called primes that will generate the prime numbers. 
+    See ducumentation on primes for examples of how to use it.
     
     >>> def primes():
 	>>>     return ExpandingSequence(get_primes())
 	>>> primes = primes()
 
     """
+    
     def __init__(self, it):
-		"""This function does something.
+		"""Class initialiser.
 
-		:param name: The name to use.
-		:type name: str.
-		:returns:  int -- the return code.
-		:raises: AttributeError, KeyError
-    
-		:Example:
-    
-		Start
-    
-		>>>
-
+		:param name: it
+		:type name: iterator.
 		"""
         self.it = it
         self._cache = []
 
     def __getitem__(self, index):
-		"""This function does something.
+		"""Gets the next value from the generator function.
 
-		:param name: The name to use.
-		:type name: str.
-		:returns:  int -- the return code.
-		:raises: AttributeError, KeyError
-    
-		:Example:
-    
-		Start
-    
-		>>>
-
+		:param name: index.
+		:type name: int.
+		:returns:  num -- the next value in the sequence
 		"""
         while len(self._cache) <= index:
             self._cache.append(next(self.it))
         return self._cache[index]
 
     def __len__(self):
-		"""This function does something.
+		"""Finds the length of the sequence.
 
-		:param name: The name to use.
-		:type name: str.
-		:returns:  int -- the return code.
-		:raises: AttributeError, KeyError
+		:param name: None
+		:returns:  int -- the length of the sequence.
     
 		:Example:
     
-		Start
-    
-		>>>
-
+		>>> primes = primes()
+		>>> primes[5]
+		>>> len(primes)
+		6
 		"""
         return len(self._cache)
 
     def seq(self):
-		"""This function does something.
+		"""Constructs a list of the sequence.
 
-		:param name: The name to use.
-		:type name: str.
-		:returns:  int -- the return code.
-		:raises: AttributeError, KeyError
+		:param name: None
+		:returns:  list -- contains the values of the sequence
     
 		:Example:
-    
-		Start
-    
-		>>>
-
+		
+		>>> primes = primes()
+		>>> primes[5]
+		>>> primes.seq()
+		[2, 3, 5, 7, 11]
 		"""
 		
         return self._cache
@@ -94,15 +75,16 @@ def get_primes():
     
     This uses the seive of Erathosens algorithm
 
-    :param None: 
+    :param name: None 
     :returns:  int -- the next prime number in the sequence.
     :raises: AttributeError, KeyError
 
 	:Example:
 	
-	This is called by using the container function ExpandingSequence
+	This is called by using the wrapper function primes() to the 
+	ExpandingSequence class.
 	
-	>>> primes = ExpandingSequence(get_primes())
+	>>> primes = primes()
 	>>> primes[5]
 	>>> primes.seq()
 	>>> len(primes)
@@ -125,7 +107,26 @@ def primes():
 	return ExpandingSequence(get_primes())
 
 def get_squares():
-    "square numbers"
+    """Generator to find the square numbers 
+    
+
+    :param name: None 
+    :returns:  int -- the next square number in the sequence.
+    :raises: AttributeError, KeyError
+
+	:Example:
+	
+	This is called by using the wrapper function squares() to the 
+	ExpandingSequence class
+	
+	>>> squares = squares()
+	>>> squares[5]
+	>>> squares.seq()
+	>>> len(squares)
+	16
+	[0, 1, 4, 9, 16]
+	5
+    """
     candidate = 0
     while True:
         yield candidate*candidate
@@ -139,7 +140,25 @@ def squares():
 	
 	
 def get_powers(n):
-    "Arbitrary powers numbers"
+    """Generator to find the powers of a number 
+    
+
+    :param name: n
+    :param type: int -- the value of the power to be used e.g. x^n
+    :returns:  the next number in the sequence
+
+	:Example:
+	
+	This is called by using the wrapper function 
+	
+	>>> powers = powers(3)
+	>>> powers[5]
+	>>> powers.seq()
+	>>> len(powers)
+	81
+	[1, 3, 9, 27, 81]
+	5
+    """
     candidate = 0
     while True:
         yield candidate**n
