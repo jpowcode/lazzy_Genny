@@ -65,9 +65,32 @@ class ExpandingSequence(Sequence):
 		>>> primes[5]
 		>>> primes.seq()
 		[2, 3, 5, 7, 11]
-		"""
-		
+		"""		
         return self._cache
+    
+    def is(self, num):
+		"""Gets the next value from the generator function.
+
+		:param name: num.
+		:type name: int.
+		:returns:  bool -- True is num is in the sequence
+		
+		:Example:
+		
+		To check whether 19 is a happy number
+		
+		>>> happys = happys()
+		>>> happys.is(19)
+		True
+		"""
+		while self._cache[-1] < num:
+			self.cache.append(next(self.it))
+		if num in self.cache:
+			return True
+		else:
+			return False
+			
+			
 
 
 def get_primes():
@@ -190,6 +213,7 @@ def get_recs(n, a, b):
         yield a
         a,b,n = b,a+b,n-1
  
+
 def get_happys():
 	"""Generator to find the happy numbers 
     
@@ -251,7 +275,6 @@ def recs(n, a, b):
 	class
 	"""
 	return ExpandingSequence(get_recs(n, a, b))
-
 
 def fibs(n, a, b):
 	"""A wrapper function, creates an object using ExpandingSequence
