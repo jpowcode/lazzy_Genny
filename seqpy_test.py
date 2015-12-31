@@ -1,9 +1,33 @@
+from nose import with_setup
 from seqpy import *
 
+############ setup functions #############
+
+
+def setup_module(module):
+    print "setup module"
+    
+def setup_primes():
+    print " "
+    print "Setup primes function"
+    global primes
+    primes = primes()
+    
+def setup_squares():
+    print " "
+    print "Setup squares function"
+    global squares
+    squares = squares()
+     
+#def teardown_module(module):
+#    print "teardown_module"
+    
+#def my_teardown_function():
+#    print "teardown function"
+    
 ############# primes test ################
 
-
-@with_setup(my_setup_function, my_teardown_function)
+@with_setup(setup_primes)
 def test_primes_0():
     assert primes[0] == 2
 
@@ -29,7 +53,7 @@ def test_primes_len():
 
 ############# squares test ################
 
-
+@with_setup(setup_squares)
 def test_squares_0():
     assert squares[0] == 0
 
@@ -56,25 +80,29 @@ def test_squares_len():
 
 
 def test_powers_0p0():
-    assert powers(0)[0] == 0
-
-
+    global powers0 
+    powers0 = powers(0)
+    assert powers0[0] == 'undefined'
+    
+    
 def test_powers_1p1():
-    assert powers(1)[1] == 1
-
-
-def test_primes_5p0():
-    assert powers(5)[0] == 0
+    global powers1 
+    powers1 = powers(1)
+    assert powers1[1] == 1
 
 
 def test_powers_3_seq():
-    powers(3)[4]
-    assert powers.seq() == [0, 3, 9, 27, 83]
+    global powers3 
+    powers3 = powers(3)
+    powers3[4]
+    assert powers3.seq() == [0, 3, 9, 27, 83]
 
 
 def test_powers_len():
-    powers(7)[32]
-    assert len(powers) == 33
+    global powers7 
+    powers7 = powers(7)
+    powers7[32]
+    assert len(powers7) == 33
 
 
 
