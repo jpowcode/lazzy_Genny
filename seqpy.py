@@ -101,13 +101,6 @@ def get_primes():
         candidate += 1
 
 
-def primes():
-	"""A wrapper function, creates an object using ExpandingSequence
-	class
-	"""
-	return ExpandingSequence(get_primes())
-
-
 def get_squares():
     """Generator to find the square numbers 
     
@@ -133,13 +126,6 @@ def get_squares():
     while True:
         yield candidate*candidate
         candidate +=1
-
-
-def squares():
-	"""A wrapper function, creates an object using ExpandingSequence
-	class
-	"""
-	return ExpandingSequence(get_squares())
 	
 	
 def get_powers(n):
@@ -166,14 +152,7 @@ def get_powers(n):
     while True:
         yield candidate**n
         candidate +=1
-        
-
-def powers(n):
-	"""A wrapper function, creates an object using ExpandingSequence
-	class
-	"""
-	return ExpandingSequence(get_powers(n))
-	
+        	
 
 def get_recs(n, a, b):
 	"""Generator to find arbitrary recursive sequences. 
@@ -210,7 +189,62 @@ def get_recs(n, a, b):
     while True:
         yield a
         a,b,n = b,a+b,n-1
-        
+ 
+def get_happys():
+	"""Generator to find the happy numbers 
+    
+
+    :param name: None
+    :returns:  the next happy number in the sequence
+
+	:Example:
+	
+	This is called by using the wrapper function 
+	
+	>>> happys = happys(3)
+	>>> happys[5]
+	>>> happys.seq()
+	>>> len(happys)
+	19
+	[1, 7, 10, 13, 19]
+	5
+    """
+    def test_happy(n):
+		past = set()			
+		while n != 1:
+			n = sum(int(i)**2 for i in str(n))
+			if n in past:
+				return False
+			past.add(n)
+		return True
+	candidate = 1
+	while True:
+		if test_happy(candidate):
+			yield candidate
+		candidate +=1
+    
+    
+		
+    
+           
+################# Wrapper Functions #########################
+def primes():
+	"""A wrapper function, creates an object using ExpandingSequence
+	class
+	"""
+	return ExpandingSequence(get_primes())
+
+def squares():
+	"""A wrapper function, creates an object using ExpandingSequence
+	class
+	"""
+	return ExpandingSequence(get_squares())
+
+def powers(n):
+	"""A wrapper function, creates an object using ExpandingSequence
+	class
+	"""
+	return ExpandingSequence(get_powers(n))
               
 def recs(n, a, b):
 	"""A wrapper function, creates an object using ExpandingSequence
@@ -225,6 +259,12 @@ def fibs(n, a, b):
 	"""
 	return ExpandingSequence(get_recs(n, 0, 1))
 
+def happys():
+	"""A wrapper function, creates an object using ExpandingSequence
+	class
+	"""
+	return ExpandingSequence(get_happys())
+	
 fibs = fibs(1)
 
 
