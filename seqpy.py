@@ -35,31 +35,31 @@ def get_primes():
 def get_squares():
     "square numbers"
     candidate = 0
-    found = []
     while True:
         yield candidate*candidate
-        found .append(candidate)
         candidate +=1
 
 
 def get_powers(n):
     "Arbitrary powers numbers"
     candidate = 0
-    found = []
     while True:
-        yield  candidate**n
-        found .append(candidate)
+        yield candidate**n
         candidate +=1
 
 primes = ExpandingSequence(get_primes())
 squares = ExpandingSequence(get_squares())
 
-
+powers = 0
 def powers(n):
-    return ExpandingSequence(get_powers(n))
+	global powers
+	powers = ExpandingSequence(get_powers(2))
 
-
-print powers(2)[3]
+powers(2)
+print squares[5]
+print squares.seq()
+print powers[3]
+print len(powers)
 #print powers(2)[1]
 #print powers(2)[2]
 #print powers(2).seq
