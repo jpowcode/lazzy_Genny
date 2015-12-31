@@ -19,7 +19,7 @@ class ExpandingSequence(Sequence):
     """
     
     def __init__(self, it):
-		"""Class initialiser.
+        """Class initialiser.
 
 		:param name: it
 		:type name: iterator.
@@ -100,11 +100,13 @@ def get_primes():
             found.append(candidate)
         candidate += 1
 
+
 def primes():
 	"""A wrapper function, creates an object using ExpandingSequence
 	class
 	"""
 	return ExpandingSequence(get_primes())
+
 
 def get_squares():
     """Generator to find the square numbers 
@@ -131,6 +133,7 @@ def get_squares():
     while True:
         yield candidate*candidate
         candidate +=1
+
 
 def squares():
 	"""A wrapper function, creates an object using ExpandingSequence
@@ -172,25 +175,58 @@ def powers(n):
 	return ExpandingSequence(get_powers(n))
 	
 
-def get_fibs(n):
-    a=0
-    b=1
-    while True:
-        yield a
-        a,b,n = b,a+b,n-1
-        
-def fibs(n):
-	return ExpandingSequence(get_fibs(n))
-	
 def get_recs(n, a, b):
+	"""Generator to find arbitrary recursive sequences. 
+	
+	These are seuences that add the previous two terms in the sequence
+	to get the next term. For example Fibonacci numbers 
+    The first two terms in the sequence are 0, 1
+    Adding these two together gives the third term 1
+    To get the next term add the last two
+    1+1 = 2
+    1+2 = 3
+    2+3 = 5
+
+    :param name: n
+    :param type: int -- the start number of the sequence
+    :param name: a
+    :param type: int -- the first term in the sequence
+    :param name: b
+    :param type: int -- the second term in the sequence
+    :returns:  the next number in the sequence
+
+	:Example:
+	
+	This is called by using the wrapper function 
+	
+	>>> fibs = fibs(1)
+	>>> fibs[5]
+	>>> fibs.seq()
+	>>> len(fibs)
+	3
+	[0, 1, 1, 2, 3]
+	5
+    """
     while True:
         yield a
         a,b,n = b,a+b,n-1
         
+              
 def recs(n, a, b):
+	"""A wrapper function, creates an object using ExpandingSequence
+	class
+	"""
 	return ExpandingSequence(get_recs(n, a, b))
 
-fibs = recs(0, 0, 1)
+
+def fibs(n, a, b):
+	"""A wrapper function, creates an object using ExpandingSequence
+	class
+	"""
+	return ExpandingSequence(get_recs(n, 0, 1))
+
+fibs = fibs(1)
+
 
 print fibs[10]
 print len(fibs)
