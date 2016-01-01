@@ -218,7 +218,7 @@ def get_recs(n, a, b):
     2+3 = 5
 
     :param name: n
-    :param type: int -- the start number of the sequence
+    :param type: int -- the nth number of the sequence
     :param name: a
     :param type: int -- the first term in the sequence
     :param name: b
@@ -275,9 +275,58 @@ def get_happys():
             yield candidate
         candidate +=1
 
+def get_mults(n):
+    """Generator to find multiples of a number
 
 
+    :param name: n
+    :param type: int -- multiples of n
+    :returns:  the next multiple of n
 
+    :Example:
+
+    This is called by using the wrapper function
+
+    >>> multss = mults(3)
+    >>> mults[5]
+    >>> mults.seq()
+    >>> len(mults)
+    6
+    [0, 3, 6, 9, 12]
+    5
+    """
+    candidate = 0 
+    while True:
+		if candidate % n == 0:
+			yield candidate
+		candidate += 1
+
+def get_mults(a, d):
+    """Generator to find an arithmetic sequence
+
+
+    :param name: a
+    :param type: int -- first number of sequence
+    :param name: d
+    :param type: int -- common difference of sequence
+    :returns:  a, a+d, a+2d ...
+
+    :Example:
+
+    This is called by using the wrapper function
+
+    >>> ariths = ariths(2, 3)
+    >>> ariths[5]
+    >>> ariths.seq()
+    >>> len(ariths)
+    14
+    [2, 5, 8, 11, 14]
+    5
+    """
+    candidate = a 
+    while True:
+		yield candidate
+		candidate +=d
 
 ################# Wrapper Functions #########################
 def primes():
@@ -316,9 +365,34 @@ def happys():
     class
     """
     return ExpandingSequence(get_happys())
+    
+def mults(n):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_mults(n))
+    
+def evens():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_mults(2))
+    
+def ariths(a, d):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_ariths(a, d))
 
-happys = happys()
-primes = primes()
-happys[100]
-primes[100]
-print intersection(happys.seq(), primes.seq())
+def odds():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_ariths(1, 2))
+    
+   
+# happys = happys()
+# primes = primes()
+# happys[100]
+# primes[100]
+# print intersection(happys.seq(), primes.seq())
