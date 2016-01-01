@@ -79,6 +79,12 @@ def setup_ndigits():
     ndigits = ndigits(3)
     ndigits[10]
 
+
+def setup_facts():
+    global facts
+    facts = facts()
+    facts[10]
+
 """
 ------------------------------------------------------------------------------
 primes test
@@ -205,7 +211,7 @@ def test_recs():
 
 def test_recs_seq():
     assert recs.seq()[:5] == [1, 3, 4, 7, 11]
-    assert fibs.seq()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 18]
+    assert fibs.seq()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 21]
 
 
 def test_recs_len():
@@ -278,12 +284,12 @@ def test_mults():
     assert mults[4] == 20
     assert evens[0] == 0
     assert evens[1] == 2
-    assert evens[4] == 6
+    assert evens[4] == 8
 
 
 def test_mults_seq():
     assert mults.seq()[:9] == [0, 5, 10, 15, 20, 25, 30, 35, 40]
-    assert evens.seq()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    assert evens.seq()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16]
 
 
 def test_mults_len():
@@ -292,9 +298,9 @@ def test_mults_len():
 
 
 def test_mults_isa():
-    assert mults.isa(8) == True
+    assert mults.isa(10) == True
     assert mults.isa(4) == False
-    assert mults.isa(45) == False
+    assert mults.isa(43) == False
     assert evens.isa(8) == True
     assert evens.isa(37) == False
     assert evens.isa(63) == False
@@ -318,17 +324,17 @@ test ariths and odds
 
 @with_setup(setup_ariths)
 def test_ariths():
-    assert ariths[0] == 0
+    assert ariths[0] == 2
     assert ariths[1] == 5
-    assert ariths[4] == 20
-    assert odds[0] == 0
-    assert odds[1] == 2
-    assert odds[4] == 6
+    assert ariths[4] == 14
+    assert odds[0] == 1
+    assert odds[1] == 3
+    assert odds[4] == 9
 
 
 def test_ariths_seq():
     assert ariths.seq()[:6] == [2, 5, 8, 11, 14, 17]
-    assert odds.seq()[:7] == [1, 3, 5, 7, 9]
+    assert odds.seq()[:7] == [1, 3, 5, 7, 9, 11, 13]
 
 
 def test_ariths_len():
@@ -365,7 +371,7 @@ test geoms
 def test_geoms():
     assert geoms[0] == 2
     assert geoms[1] == 6
-    assert geoms[4] == 20
+    assert geoms[4] == 162
 
 
 def test_geoms_seq():
@@ -401,7 +407,7 @@ def test_ndigits():
 
 
 def test_ndigits_seq():
-    assert ndigits.seq()[:6] == [100, 101, 102, 103, 104, 105, 106]
+    assert ndigits.seq()[:6] == [100, 101, 102, 103, 104, 105]
 
 
 def test_ndigits_len():
@@ -418,6 +424,37 @@ def test_ndigits_isa():
 def test_ndigits_raises_type_error():
     ndigits[0.5]
 
+"""
+------------------------------------------------------------------------------
+test facts
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_facts)
+def test_facts():
+    assert facts[0] == 1
+    assert facts[1] == 1
+    assert facts[4] == 24
+
+
+def test_facts_seq():
+    assert facts.seq()[:6] == [1, 1, 2, 6, 24, 120]
+
+
+def test_facts_len():
+    assert len(facts) == 11
+
+
+def test_facts_isa():
+    assert facts.isa(120) == True
+    assert facts.isa(132) == False
+    assert facts.isa(17) == False
+
+
+@raises(TypeError)
+def test_facts_raises_type_error():
+    facts[0.5]
 
 """
 A generator to make multiple test cases

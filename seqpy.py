@@ -404,13 +404,15 @@ def get_facts():
     6
     """
     candidate = 0
+    n = 2
     while True:
         if candidate == 0:
             yield 1
             candidate = 1
         else:
             yield candidate
-            candidate = candidate * (candidate + 1)
+            candidate *= n
+            n = n + 1
 
 """
 ------------------------------------------------------------------------------
