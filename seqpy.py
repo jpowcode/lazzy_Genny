@@ -295,13 +295,14 @@ def get_mults(n):
     [0, 3, 6, 9, 12]
     5
     """
-    candidate = 0 
+    candidate = 0
     while True:
-		if candidate % n == 0:
-			yield candidate
-		candidate += 1
+        if candidate % n == 0:
+            yield candidate
+        candidate += 1
 
-def get_mults(a, d):
+
+def get_ariths(a, d):
     """Generator to find an arithmetic sequence
 
 
@@ -323,10 +324,65 @@ def get_mults(a, d):
     [2, 5, 8, 11, 14]
     5
     """
-    candidate = a 
+    candidate = a
     while True:
-		yield candidate
-		candidate +=d
+        yield candidate
+        candidate += d
+
+
+def get_geoms(a, r):
+    """Generator to find a geometric sequence
+
+
+    :param name: a
+    :param type: int -- first number of sequence
+    :param name: r
+    :param type: int -- common ratio of sequence
+    :returns:  a, ar, ar^2 ...
+
+    :Example:
+
+    This is called by using the wrapper function
+
+    >>> geoms = geoms(2, 3)
+    >>> geoms[5]
+    >>> geoms.seq()
+    >>> len(geoms)
+    32
+    [2, 4, 8, 16, 32]
+    5
+    """
+    candidate = a
+    while True:
+        yield candidate
+        candidate *= r
+
+
+def get_ndigits(n):
+    """Generator to find numbers with n digits
+
+
+    :param name: n
+    :param type: int -- number of digits
+    :returns:  list with n digit numbers
+
+    :Example:
+
+    This is called by using the wrapper function
+
+    >>> ndigits = ndigits(4)
+    >>> ndigits[5]
+    >>> ndigits.seq()
+    >>> len(ndigits)
+    32
+    [1001, 1002, 1003, 1004]
+    5
+    """
+    candidate = 10**(n-1)
+    while candidate < 10**n:
+        yield candidate
+        candidate += 1
+
 
 ################# Wrapper Functions #########################
 def primes():
@@ -365,19 +421,19 @@ def happys():
     class
     """
     return ExpandingSequence(get_happys())
-    
+
 def mults(n):
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_mults(n))
-    
+
 def evens():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_mults(2))
-    
+
 def ariths(a, d):
     """A wrapper function, creates an object using ExpandingSequence
     class
@@ -389,10 +445,17 @@ def odds():
     class
     """
     return ExpandingSequence(get_ariths(1, 2))
-    
-   
-# happys = happys()
-# primes = primes()
-# happys[100]
-# primes[100]
-# print intersection(happys.seq(), primes.seq())
+
+
+def geoms(a, r):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_geoms(a, r))
+
+
+def ndigits(n):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_geoms(n))
