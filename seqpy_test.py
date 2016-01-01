@@ -2,7 +2,11 @@ from nose import with_setup
 from nose.tools import raises
 from seqpy import *
 
-############ setup and teardown functions #############
+"""
+------------------------------------------------------------------------------
+setup and teardown functions
+------------------------------------------------------------------------------
+"""
 
 
 def setup_module(module):
@@ -26,13 +30,12 @@ def setup_squares():
 
 
 def setup_powers():
-    #global powers
     pass
 
 
 def setup_recs():
-	""" Uses sequence 1, 3, 4, 7, 11, 18
-	"""
+    """ Uses sequence 1, 3, 4, 7, 11, 18
+    """
     global recs
     global fibs
     recs = recs(0, 1, 3)
@@ -40,22 +43,48 @@ def setup_recs():
     recs[10]
     fibs[10]
 
+
 def setup_mults():
     global mults
-    global mults
-    recs = mults(5)
+    global evens
+    mults = mults(5)
     evens = evens()
     mults[10]
     evens[10]
-    
+
+
+def setup_ariths():
+    global ariths
+    global odds
+    ariths = ariths(2, 3)
+    odds = odds()
+    ariths[10]
+    odds[10]
+
+
 def setup_happys():
     global happys
     happys = happys()
     happys[10]
 
 
+def setup_geoms():
+    global geoms
+    geoms = geoms(2, 3)
+    geoms[10]
 
-############# primes test ################
+
+def setup_ndigits():
+    global ndigits
+    ndigits = ndigits(3)
+    ndigits[10]
+
+"""
+------------------------------------------------------------------------------
+primes test
+------------------------------------------------------------------------------
+"""
+
 
 @with_setup(setup_primes)
 def test_primes():
@@ -77,12 +106,17 @@ def test_primes_isa():
     assert primes.isa(8) == False
     assert primes.isa(50) == False
 
+
 @raises(TypeError)
 def test_primes_raises_type_error():
     primes[0.5]
 
+"""
+------------------------------------------------------------------------------
+squares test
+------------------------------------------------------------------------------
+"""
 
-############# squares test ################
 
 @with_setup(setup_squares)
 def test_squares():
@@ -108,7 +142,13 @@ def test_squares_isa():
 @raises(TypeError)
 def test_squares_raises_type_error():
     squares[0.5]
-############ powers test ################
+
+"""
+------------------------------------------------------------------------------
+powers test
+------------------------------------------------------------------------------
+"""
+
 
 @with_setup(setup_powers)
 def test_powers_0p0():
@@ -141,12 +181,17 @@ def test_primes_isa():
     assert powers7.isa(128) == True
     assert powers3.isa(127) == False
 
+
 @raises(TypeError)
 def test_powers_raises_type_error():
     powers7[0.5]
-    
-    
-############# recs test ##############
+
+"""
+------------------------------------------------------------------------------
+recs test
+------------------------------------------------------------------------------
+"""
+
 
 @with_setup(setup_recs)
 def test_recs():
@@ -176,15 +221,23 @@ def test_recs_isa():
     assert fibs.isa(4) == False
     assert fibs.isa(45) == False
 
+
 @raises(TypeError)
 def test_recs_raises_type_error():
     recs[0.5]
-    
+
+
 @raises(TypeError)
 def test_fibs_raises_type_error():
     fibs[0.5]
-    
-############# happys test ############
+
+
+"""
+------------------------------------------------------------------------------
+happys test
+------------------------------------------------------------------------------
+"""
+
 
 @with_setup(setup_happys)
 def test_happys():
@@ -206,12 +259,17 @@ def test_happys_isa():
     assert happys.isa(8) == False
     assert happys.isa(50) == False
 
+
 @raises(TypeError)
 def test_happys_raises_type_error():
     happys[0.5]
-    
-    
-############# mults test ############
+
+"""
+------------------------------------------------------------------------------
+mults test
+------------------------------------------------------------------------------
+"""
+
 
 @with_setup(setup_mults)
 def test_mults():
@@ -225,11 +283,13 @@ def test_mults():
 
 def test_mults_seq():
     assert mults.seq()[:9] == [0, 5, 10, 15, 20, 25, 30, 35, 40]
-	assert evens.seq()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    assert evens.seq()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
 
 def test_mults_len():
     assert len(mults) == 11
-	assert len(evens) == 11
+    assert len(evens) == 11
+
 
 def test_mults_isa():
     assert mults.isa(8) == True
@@ -239,14 +299,124 @@ def test_mults_isa():
     assert evens.isa(37) == False
     assert evens.isa(63) == False
 
+
 @raises(TypeError)
 def test_mults_raises_type_error():
     mults[0.5]
+
 
 @raises(TypeError)
 def test_evens_raises_type_error():
     mults[0.5]
 
+"""
+------------------------------------------------------------------------------
+test ariths and odds
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_ariths)
+def test_ariths():
+    assert ariths[0] == 0
+    assert ariths[1] == 5
+    assert ariths[4] == 20
+    assert odds[0] == 0
+    assert odds[1] == 2
+    assert odds[4] == 6
+
+
+def test_ariths_seq():
+    assert ariths.seq()[:6] == [2, 5, 8, 11, 14, 17]
+    assert odds.seq()[:7] == [1, 3, 5, 7, 9]
+
+
+def test_ariths_len():
+    assert len(ariths) == 11
+    assert len(odds) == 11
+
+
+def test_ariths_isa():
+    assert ariths.isa(8) == True
+    assert ariths.isa(4) == False
+    assert ariths.isa(24) == False
+    assert odds.isa(7) == True
+    assert odds.isa(2) == False
+    assert odds.isa(34) == False
+
+
+@raises(TypeError)
+def test_ariths_raises_type_error():
+    ariths[0.5]
+
+
+@raises(TypeError)
+def test_odds_raises_type_error():
+    odds[0.5]
+
+"""
+------------------------------------------------------------------------------
+test geoms
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_geoms)
+def test_geoms():
+    assert geoms[0] == 2
+    assert geoms[1] == 6
+    assert geoms[4] == 20
+
+
+def test_geoms_seq():
+    assert geoms.seq()[:6] == [2, 6, 18, 54, 162, 486]
+
+
+def test_geoms_len():
+    assert len(geoms) == 11
+
+
+def test_geoms_isa():
+    assert geoms.isa(18) == True
+    assert geoms.isa(234) == False
+    assert geoms.isa(13) == False
+
+
+@raises(TypeError)
+def test_geoms_raises_type_error():
+    geoms[0.5]
+
+"""
+------------------------------------------------------------------------------
+test ndigits
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_ndigits)
+def test_ndigits():
+    assert ndigits[0] == 100
+    assert ndigits[1] == 101
+    assert ndigits[4] == 104
+
+
+def test_ndigits_seq():
+    assert ndigits.seq()[:6] == [100, 101, 102, 103, 104, 105, 106]
+
+
+def test_ndigits_len():
+    assert len(ndigits) == 11
+
+
+def test_ndigits_isa():
+    assert ndigits.isa(132) == True
+    assert ndigits.isa(4590) == False
+    assert ndigits.isa(24) == False
+
+
+@raises(TypeError)
+def test_ndigits_raises_type_error():
+    ndigits[0.5]
 
 
 """
