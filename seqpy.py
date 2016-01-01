@@ -1,5 +1,6 @@
 from collections import Sequence
 
+
 class ExpandingSequence(Sequence):
     """A container class to add methods to the generator functions.
 
@@ -89,6 +90,7 @@ class ExpandingSequence(Sequence):
         else:
             return False
 
+
 def intersection(*args):
     """Finds numbers common to two or more sequences.
 
@@ -112,13 +114,10 @@ def intersection(*args):
     for arg in args:
         A.append(set(arg))
 
-    A = reduce(lambda x,y: x & y,A)
+    A = reduce(lambda x, y: x & y, A)
     A = list(A)
     A.sort()
     return A
-
-
-
 
 
 def get_primes():
@@ -176,7 +175,7 @@ def get_squares():
     candidate = 0
     while True:
         yield candidate*candidate
-        candidate +=1
+        candidate += 1
 
 
 def get_powers(n):
@@ -202,7 +201,7 @@ def get_powers(n):
     candidate = 0
     while True:
         yield candidate**n
-        candidate +=1
+        candidate += 1
 
 
 def get_recs(n, a, b):
@@ -239,7 +238,7 @@ def get_recs(n, a, b):
     """
     while True:
         yield a
-        a,b,n = b,a+b,n-1
+        a, b, n = b, a+b, n-1
 
 
 def get_happys():
@@ -273,7 +272,8 @@ def get_happys():
     while True:
         if test_happy(candidate):
             yield candidate
-        candidate +=1
+        candidate += 1
+
 
 def get_mults(n):
     """Generator to find multiples of a number
@@ -384,12 +384,47 @@ def get_ndigits(n):
         candidate += 1
 
 
-################# Wrapper Functions #########################
+def get_facts():
+    """Generator to find the factorial numbers
+
+
+    :param name: None
+    :returns:  the next factorial number in the sequence
+
+    :Example:
+
+    This is called by using the wrapper function
+
+    >>> facts = facts(3)
+    >>> facts[5]
+    >>> facts.seq()
+    >>> len(facts)
+    120
+    [1, 1, 2, 6, 24, 120]
+    6
+    """
+    candidate = 0
+    while True:
+        if candidate == 0:
+            yield 1
+            candidate = 1
+        else:
+            yield candidate
+            candidate = candidate * (candidate + 1)
+
+"""
+------------------------------------------------------------------------------
+Wrapper Functions
+------------------------------------------------------------------------------
+"""
+
+
 def primes():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_primes())
+
 
 def squares():
     """A wrapper function, creates an object using ExpandingSequence
@@ -397,11 +432,13 @@ def squares():
     """
     return ExpandingSequence(get_squares())
 
+
 def powers(n):
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_powers(n))
+
 
 def recs(n, a, b):
     """A wrapper function, creates an object using ExpandingSequence
@@ -416,11 +453,13 @@ def fibs(n):
     """
     return ExpandingSequence(get_recs(n, 0, 1))
 
+
 def happys():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_happys())
+
 
 def mults(n):
     """A wrapper function, creates an object using ExpandingSequence
@@ -428,17 +467,20 @@ def mults(n):
     """
     return ExpandingSequence(get_mults(n))
 
+
 def evens():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_mults(2))
 
+
 def ariths(a, d):
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_ariths(a, d))
+
 
 def odds():
     """A wrapper function, creates an object using ExpandingSequence
@@ -458,4 +500,11 @@ def ndigits(n):
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    return ExpandingSequence(get_geoms(n))
+    return ExpandingSequence(get_ndigits(n))
+
+
+def facts():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_facts())
