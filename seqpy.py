@@ -447,6 +447,45 @@ def get_polys(n):
         yield candidate
         candidate += n - 1 + m*(n - 2)
         m += 1
+
+
+def get_perf(dpa):
+	"""Generator to find the perfect, abundant or deficit numbers
+
+
+    :param name: dpa 
+    :param type: string -- set as d for deficit, p for perfect and 
+							a for abundant
+    :returns:  the next deficit, perfect or abundant number 
+				in the sequence
+
+    :Example:
+
+    This is called by using the wrapper function get_perfs
+
+    >>> perfs = perfs('p')
+    >>> perfs[4]
+    >>> perfs.seq()
+    >>> len(perfs)
+    8128
+    [6, 28, 496, 8128]
+    4
+    """
+    candidate = 1
+    while True:
+		total = 0
+		for i in xrange(1, candidate):
+			if n % i == 0:
+				total += i
+		if dpa == 'd' and total < candidate:
+			yield candidate
+		if: dpa == 'p' and total == candidate:
+			yield candidate
+		if: dpa == 'a' and total > candidate:
+			yield candidate
+		
+		
+
 """
 ------------------------------------------------------------------------------
 Wrapper Functions
@@ -555,4 +594,25 @@ def triangs(n):
     class
     """
     return ExpandingSequence(polys(n))
+    
+    
+def perfs():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(perfs('p'))
+    
+    
+def defics():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(perfs('d'))
+    
+    
+def abunds():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(perfs('a'))
 
