@@ -455,7 +455,47 @@ def test_facts_isa():
 @raises(TypeError)
 def test_facts_raises_type_error():
     facts[0.5]
+    
+"""
+------------------------------------------------------------------------------
+test polys and triangs
+------------------------------------------------------------------------------
+"""
 
+
+@with_setup(setup_polys)
+def test_facts():
+    assert polys[0] == 1
+    assert polys[1] == 5
+    assert polys[3] == 22
+	assert triangs[0] == 1
+    assert triangs[1] == 3
+    assert triangs[4] == 15
+
+def test_polys_seq():
+    assert polys.seq()[:5] == [1, 5, 12, 22, 35]
+	assert triangs.seq()[:5] == [1, 3, 6, 10, 15]
+
+def test_polys_len():
+    assert len(polys) == 11
+	assert len(triangs) == 11
+
+def test_polys_isa():
+    assert polys.isa(5) == True
+    assert polys.isa(23) == False
+    assert polys.isa(38) == False
+	assert triangs.isa(10) == True
+    assert triangs.isa(23) == False
+    assert triangs.isa(38) == False
+
+@raises(TypeError)
+def test_s_raises_type_error():
+    polys[0.5]
+
+
+@raises(TypeError)
+def test_s_raises_type_error():
+    triangs[0.5]
 """
 A generator to make multiple test cases
 def test_primes():
