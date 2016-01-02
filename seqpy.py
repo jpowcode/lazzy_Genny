@@ -73,6 +73,22 @@ class ExpandingSequence(Sequence):
         """
         return self._cache
 
+    def every(self, n):
+        """Constructs a list of the sequence but only every n items
+
+        :param name: n
+        :param type: int
+        :returns:  list -- contains the values of the sequence every n items
+
+        :Example:
+
+        >>> primes = primes()
+        >>> primes[7]
+        >>> primes.every(2)
+        [2, 5, 11, 17]
+        """
+        return self._cache[::n]
+
     def between(self, a, b):
         """Constructs a list of the sequence between the values a and b.
 
@@ -512,7 +528,33 @@ def get_perfs(dpa):
         candidate += 1
 
 
+def get_palinds():
+    """Generator to find pallindromic numbers
 
+
+    :param name: None
+    :returns:  the next pallindromic in the sequence
+
+    :Example:
+
+    This is called by using the wrapper function get_palinds
+
+    >>> palinds = palinds()
+    >>> palinds[15]
+    >>> palinds.seq()
+    >>> len(palinds)
+    77
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 22, 33, 44, 55, 66, 77]
+    16
+    """
+    candidate = 1
+    while True:
+        NumListFor = list(str(candidate))
+        NumListBack = list(str(candidate))
+        NumListBack.reverse()
+        if NumListFor == NumListBack:
+            yield candidate
+        candidate = candidate + 1
 """
 ------------------------------------------------------------------------------
 Wrapper Functions
@@ -642,3 +684,10 @@ def abunds():
     class
     """
     return ExpandingSequence(get_perfs('a'))
+
+
+def palinds():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_palinds())

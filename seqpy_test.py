@@ -106,6 +106,11 @@ def setup_perfs():
     abunds[4]
     defics[4]
 
+
+def setup_palinds():
+    global palinds
+    palinds = palinds()
+    palinds[10]
 """
 ------------------------------------------------------------------------------
 primes test
@@ -580,6 +585,12 @@ def test_perfs():
     assert defics[1] == 2
     assert defics[4] == 5
 
+def test_perfs_len():
+    assert len(perfs) == 4
+    assert len(abunds) == 5
+    assert len(defics) == 5
+
+
 def test_perfs_seq():
     assert perfs.seq()[:3] == [6, 28, 496]
     assert abunds.seq()[:4] == [12, 18, 20, 24]
@@ -591,11 +602,6 @@ def test_perfs_between():
     assert abunds.between(11, 25) == [12, 18, 20, 24]
     assert defics.between(3, 6) == [3, 4, 5]
 
-
-def test_perfs_len():
-    assert len(perfs) == 3
-    assert len(abunds) == 4
-    assert len(defics) == 4
 
 def test_perfs_isa():
     assert perfs.isa(28) == True
@@ -621,6 +627,43 @@ def test_s_raises_type_error():
 @raises(TypeError)
 def test_s_raises_type_error():
     defics[0.5]
+
+"""
+------------------------------------------------------------------------------
+test palinds
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_palinds)
+def test_palinds():
+    assert palinds[0] == 1
+    assert palinds[1] == 2
+    assert palinds[10] == 22
+
+def test_palinds_len():
+    assert len(palinds) == 11
+
+
+def test_palinds_seq():
+    assert palinds.seq()[:11] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22]
+
+
+def test_palinds_between():
+    assert palinds.between(9, 15) == [9, 11]
+
+
+def test_palinds_isa():
+    assert palinds.isa(1551) == True
+    assert palinds.isa(132) == False
+    assert palinds.isa(17) == False
+
+
+@raises(TypeError)
+def test_palinds_raises_type_error():
+    palinds[0.5]
+
+
 """
 A generator to make multiple test cases
 def test_primes():
