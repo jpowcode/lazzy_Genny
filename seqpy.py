@@ -72,7 +72,7 @@ class ExpandingSequence(Sequence):
         [2, 3, 5, 7, 11]
         """
         return self._cache
-        
+
     def between(self, a, b):
         """Constructs a list of the sequence between the values a and b.
 
@@ -80,8 +80,8 @@ class ExpandingSequence(Sequence):
         :param type: int -- lower bound
         :param name: b
         :param type: int -- upper bound
-        :returns:  list -- contains the values of the sequence between 
-							a and b
+        :returns:  list -- contains the values of the sequence between
+                            a and b
 
         :Example:
 
@@ -90,9 +90,12 @@ class ExpandingSequence(Sequence):
         >>> primes.seq().between(3, 7)
         [3, 5, 7]
         """
-        A = self._cache
-        return filter(lambda x: 3 <= x <= 7, A)
-     
+        if not self._cache:     #check if cahce is empty to avoid errors
+            self._cache.append(next(self.it))
+        while self._cache[-1] < b:
+            self._cache.append(next(self.it))
+        return filter(lambda x: a <= x <= b, self._cache)
+
 
     def isa(self, num):
         """Gets the next value from the generator function.
@@ -109,6 +112,8 @@ class ExpandingSequence(Sequence):
         >>> happys.isa(19)
         True
         """
+        if not self._cache:     #check if cahce is empty to avoid errors
+            self._cache.append(next(self.it))
         while self._cache[-1] < num:
             self._cache.append(next(self.it))
         if num in self._cache:
@@ -451,7 +456,7 @@ def get_polys(n):
 
     :Example:
 
-    This is called by using the wrapper function polys(3) for pentagonal 
+    This is called by using the wrapper function polys(3) for pentagonal
     numbers
 
     >>> polys = polys(5)
@@ -470,15 +475,15 @@ def get_polys(n):
         m += 1
 
 
-def get_perf(dpa):
-	"""Generator to find the perfect, abundant or deficient numbers
+def get_perfs(dpa):
+    """Generator to find the perfect, abundant or deficient numbers
 
 
-    :param name: dpa 
-    :param type: string -- set as d for deficient, p for perfect and 
-							a for abundant
-    :returns:  the next deficient, perfect or abundant number 
-				in the sequence
+    :param name: dpa
+    :param type: string -- set as d for deficient, p for perfect and
+                            a for abundant
+    :returns:  the next deficient, perfect or abundant number
+                in the sequence
 
     :Example:
 
@@ -494,18 +499,19 @@ def get_perf(dpa):
     """
     candidate = 1
     while True:
-		total = 0
-		for i in xrange(1, candidate):
-			if n % i == 0:
-				total += i
-		if dpa == 'd' and total < candidate:
-			yield candidate
-		if: dpa == 'p' and total == candidate:
-			yield candidate
-		if: dpa == 'a' and total > candidate:
-			yield candidate
-		
-		
+        total = 0
+        for i in xrange(1, candidate):
+            if candidate % i == 0:
+                total += i
+        if dpa == 'd' and total < candidate:
+            yield candidate
+        if dpa == 'p' and total == candidate:
+            yield candidate
+        if dpa == 'a' and total > candidate:
+            yield candidate
+        candidate += 1
+
+
 
 """
 ------------------------------------------------------------------------------
@@ -603,37 +609,36 @@ def facts():
     class
     """
     return ExpandingSequence(get_facts())
-    
+
 def polys(n):
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    return ExpandingSequence(polys(n))
-    
-def triangs(n):
+    return ExpandingSequence(get_polys(n))
+
+def triangs():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    return ExpandingSequence(polys(n))
-    
-    
+    return ExpandingSequence(get_polys(3))
+
+
 def perfs():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    return ExpandingSequence(perfs('p'))
-    
-    
+    return ExpandingSequence(get_perfs('p'))
+
+
 def defics():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    return ExpandingSequence(perfs('d'))
-    
-    
+    return ExpandingSequence(get_perfs('d'))
+
+
 def abunds():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    return ExpandingSequence(perfs('a'))
-
+    return ExpandingSequence(get_perfs('a'))

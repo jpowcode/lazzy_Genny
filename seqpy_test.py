@@ -84,8 +84,8 @@ def setup_facts():
     global facts
     facts = facts()
     facts[10]
-    
-    
+
+
 def setup_polys():
     global polys
     global triangs
@@ -93,18 +93,18 @@ def setup_polys():
     triangs = triangs()
     polys[10]
     triangs[10]
-    
-    
+
+
 def setup_perfs():
     global perfs
     global abunds
     global defics
-    perfs = perfss('p')
-    abunds = perfs('a')
-    defics = perfs('d')
-    perfs[10]
-    abunds[10]
-    defics[10]
+    perfs = perfs()
+    abunds = abunds()
+    defics = defics()
+    perfs[3]
+    abunds[4]
+    defics[4]
 
 """
 ------------------------------------------------------------------------------
@@ -156,6 +156,10 @@ def test_squares_seq():
     assert squares.seq()[:11] == [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 
 
+def test_squares_between():
+    assert squares.between(2, 37) == [4, 9, 16, 25, 36]
+
+
 def test_squares_len():
     assert len(squares) == 26
 
@@ -197,6 +201,10 @@ def test_powers_3_seq():
     assert powers3.seq() == [0, 1, 8, 27, 64]
 
 
+def test_powers_between():
+    assert powers3.between(2, 37) == [8, 27]
+
+
 def test_powers_len():
     global powers7
     powers7 = powers(7)
@@ -233,6 +241,11 @@ def test_recs():
 def test_recs_seq():
     assert recs.seq()[:5] == [1, 3, 4, 7, 11]
     assert fibs.seq()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 21]
+
+
+def test_recs_between():
+    assert recs.between(2, 12) == [3, 4, 7, 11]
+    assert fibs.between(5, 13) == [5, 8, 13]
 
 
 def test_recs_len():
@@ -277,6 +290,9 @@ def test_happys_seq():
     assert happys.seq()[:5] == [1, 7, 10, 13, 19]
 
 
+def test_happys_between():
+    assert happys.between(11, 14) == [13]
+
 def test_happys_len():
     assert len(happys) == 11
 
@@ -311,6 +327,12 @@ def test_mults():
 def test_mults_seq():
     assert mults.seq()[:9] == [0, 5, 10, 15, 20, 25, 30, 35, 40]
     assert evens.seq()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16]
+
+
+def test_mults_between():
+    assert mults.between(0, 21) == [0, 5, 10, 15, 20]
+    assert evens.between(1, 5) == [2, 4]
+
 
 
 def test_mults_len():
@@ -357,10 +379,14 @@ def test_ariths_seq():
     assert ariths.seq()[:6] == [2, 5, 8, 11, 14, 17]
     assert odds.seq()[:7] == [1, 3, 5, 7, 9, 11, 13]
 
-
 def test_ariths_len():
     assert len(ariths) == 11
     assert len(odds) == 11
+
+
+def test_ariths_between():
+    assert ariths.between(12, 18) == [14, 17]
+    assert odds.between(14, 25) == [15, 17, 19, 21, 23, 25]
 
 
 def test_ariths_isa():
@@ -399,6 +425,10 @@ def test_geoms_seq():
     assert geoms.seq()[:6] == [2, 6, 18, 54, 162, 486]
 
 
+def test_geoms_between():
+    assert geoms.between(54, 60) == [54]
+
+
 def test_geoms_len():
     assert len(geoms) == 11
 
@@ -435,6 +465,11 @@ def test_ndigits_len():
     assert len(ndigits) == 11
 
 
+def test_ndigits_between():
+    assert ndigits.between(32, 56) == []
+    assert ndigits.between(234, 238) == [234, 235, 236, 237, 238]
+
+
 def test_ndigits_isa():
     assert ndigits.isa(132) == True
     assert ndigits.isa(4590) == False
@@ -463,6 +498,10 @@ def test_facts_seq():
     assert facts.seq()[:6] == [1, 1, 2, 6, 24, 120]
 
 
+def test_facts_between():
+    assert facts.between(1, 6) == [1, 1, 2, 6]
+
+
 def test_facts_len():
     assert len(facts) == 11
 
@@ -476,7 +515,7 @@ def test_facts_isa():
 @raises(TypeError)
 def test_facts_raises_type_error():
     facts[0.5]
-    
+
 """
 ------------------------------------------------------------------------------
 test polys and triangs
@@ -485,27 +524,32 @@ test polys and triangs
 
 
 @with_setup(setup_polys)
-def test_facts():
+def test_polys():
     assert polys[0] == 1
     assert polys[1] == 5
     assert polys[3] == 22
-	assert triangs[0] == 1
+    assert triangs[0] == 1
     assert triangs[1] == 3
     assert triangs[4] == 15
 
 def test_polys_seq():
     assert polys.seq()[:5] == [1, 5, 12, 22, 35]
-	assert triangs.seq()[:5] == [1, 3, 6, 10, 15]
+    assert triangs.seq()[:5] == [1, 3, 6, 10, 15]
+
+
+def test_polys_between():
+    assert polys.between(4, 13) == [5, 12]
+
 
 def test_polys_len():
     assert len(polys) == 11
-	assert len(triangs) == 11
+    assert len(triangs) == 11
 
 def test_polys_isa():
     assert polys.isa(5) == True
     assert polys.isa(23) == False
     assert polys.isa(38) == False
-	assert triangs.isa(10) == True
+    assert triangs.isa(10) == True
     assert triangs.isa(23) == False
     assert triangs.isa(38) == False
 
@@ -517,7 +561,7 @@ def test_s_raises_type_error():
 @raises(TypeError)
 def test_s_raises_type_error():
     triangs[0.5]
-    
+
 """
 ------------------------------------------------------------------------------
 test perfs and abunds and defics
@@ -529,29 +573,35 @@ test perfs and abunds and defics
 def test_perfs():
     assert perfs[0] == 6
     assert perfs[1] == 28
-    assert perfs[3] == 8128
-	assert abunds[0] == 12
+    assert abunds[0] == 12
     assert abunds[1] == 18
     assert abunds[3] == 24
     assert defics[0] == 1
     assert defics[1] == 2
-    assert defics[5] == 7
+    assert defics[4] == 5
 
 def test_perfs_seq():
-    assert perfs.seq()[:4] == [6, 28, 496, 8128]
-	assert abunds.seq()[:4] == [12, 18, 20, 24]
-	assert defics.seq()[:6] == [1, 2, 3, 4, 5, 7]
+    assert perfs.seq()[:3] == [6, 28, 496]
+    assert abunds.seq()[:4] == [12, 18, 20, 24]
+    assert defics.seq()[:4] == [1, 2, 3, 4]
+
+
+def test_perfs_between():
+    assert perfs.between(0, 10) == [6]
+    assert abunds.between(11, 25) == [12, 18, 20, 24]
+    assert defics.between(3, 6) == [3, 4, 5]
+
 
 def test_perfs_len():
-    assert len(perfs) == 11
-	assert len(abunds) == 11
-	assert len(defics) == 11
+    assert len(perfs) == 3
+    assert len(abunds) == 4
+    assert len(defics) == 4
 
 def test_perfs_isa():
     assert perfs.isa(28) == True
     assert perfs.isa(23) == False
-    assert perfs.isa(567) == False
-	assert abunds.isa(24) == True
+    assert perfs.isa(7) == False
+    assert abunds.isa(24) == True
     assert abunds.isa(13) == False
     assert abunds.isa(23) == False
     assert defics.isa(5) == True
@@ -566,8 +616,8 @@ def test_s_raises_type_error():
 @raises(TypeError)
 def test_s_raises_type_error():
     abunds[0.5]
-    
-    
+
+
 @raises(TypeError)
 def test_s_raises_type_error():
     defics[0.5]
