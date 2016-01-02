@@ -27,6 +27,7 @@ class ExpandingSequence(Sequence):
         self.it = it
         self._cache = []
 
+
     def __getitem__(self, index):
         """Gets the next value from the generator function.
 
@@ -52,6 +53,10 @@ class ExpandingSequence(Sequence):
         6
         """
         return len(self._cache)
+
+    def __str__(self):
+        itname = eval(self.it.__name__)
+        return itname.__doc__
 
     def seq(self):
         """Constructs a list of the sequence.
@@ -393,7 +398,7 @@ def get_facts():
 
     :Example:
 
-    This is called by using the wrapper function
+    This is called by using the wrapper function get_facts
 
     >>> facts = facts(3)
     >>> facts[5]
@@ -414,6 +419,34 @@ def get_facts():
             candidate *= n
             n = n + 1
 
+
+def get_polys(n):
+    """Generator to find polygonal numbers
+
+
+    :param name: n
+    :param type: int -- number of edges in polygon
+    :returns:  list of polygonal numbers order n
+
+    :Example:
+
+    This is called by using the wrapper function polys(3) for pentagonal 
+    numbers
+
+    >>> polys = polys(5)
+    >>> polys[3]
+    >>> polys.seq()
+    >>> len(polys)
+    22
+    [1, 5, 12, 22]
+    4
+    """
+    candidate = 1
+    m = 0
+    while True:
+        yield candidate
+        candidate += n - 1 + m*(n - 2)
+        m += 1
 """
 ------------------------------------------------------------------------------
 Wrapper Functions
@@ -510,3 +543,16 @@ def facts():
     class
     """
     return ExpandingSequence(get_facts())
+    
+def polys(n):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(polys(n))
+    
+def triangs(n):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(polys(n))
+
