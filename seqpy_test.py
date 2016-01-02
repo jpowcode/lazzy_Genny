@@ -84,6 +84,27 @@ def setup_facts():
     global facts
     facts = facts()
     facts[10]
+    
+    
+def setup_polys():
+    global polys
+    global triangs
+    polys = polys(5)
+    triangs = triangs()
+    polys[10]
+    triangs[10]
+    
+    
+def setup_perfs():
+    global perfs
+    global abunds
+    global defics
+    perfs = perfss('p')
+    abunds = perfs('a')
+    defics = perfs('d')
+    perfs[10]
+    abunds[10]
+    defics[10]
 
 """
 ------------------------------------------------------------------------------
@@ -496,6 +517,60 @@ def test_s_raises_type_error():
 @raises(TypeError)
 def test_s_raises_type_error():
     triangs[0.5]
+    
+"""
+------------------------------------------------------------------------------
+test perfs and abunds and defics
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_perfs)
+def test_perfs():
+    assert perfs[0] == 6
+    assert perfs[1] == 28
+    assert perfs[3] == 8128
+	assert abunds[0] == 12
+    assert abunds[1] == 18
+    assert abunds[3] == 24
+    assert defics[0] == 1
+    assert defics[1] == 2
+    assert defics[5] == 7
+
+def test_perfs_seq():
+    assert perfs.seq()[:4] == [6, 28, 496, 8128]
+	assert abunds.seq()[:4] == [12, 18, 20, 24]
+	assert defics.seq()[:6] == [1, 2, 3, 4, 5, 7]
+
+def test_perfs_len():
+    assert len(perfs) == 11
+	assert len(abunds) == 11
+	assert len(defics) == 11
+
+def test_perfs_isa():
+    assert perfs.isa(28) == True
+    assert perfs.isa(23) == False
+    assert perfs.isa(567) == False
+	assert abunds.isa(24) == True
+    assert abunds.isa(13) == False
+    assert abunds.isa(23) == False
+    assert defics.isa(5) == True
+    assert defics.isa(6) == False
+    assert defics.isa(28) == False
+
+@raises(TypeError)
+def test_s_raises_type_error():
+    perfs[0.5]
+
+
+@raises(TypeError)
+def test_s_raises_type_error():
+    abunds[0.5]
+    
+    
+@raises(TypeError)
+def test_s_raises_type_error():
+    defics[0.5]
 """
 A generator to make multiple test cases
 def test_primes():
