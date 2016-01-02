@@ -72,6 +72,27 @@ class ExpandingSequence(Sequence):
         [2, 3, 5, 7, 11]
         """
         return self._cache
+        
+    def between(self, a, b):
+        """Constructs a list of the sequence between the values a and b.
+
+        :param name: a
+        :param type: int -- lower bound
+        :param name: b
+        :param type: int -- upper bound
+        :returns:  list -- contains the values of the sequence between 
+							a and b
+
+        :Example:
+
+        >>> primes = primes()
+        >>> primes[5]
+        >>> primes.seq().between(3, 7)
+        [3, 5, 7]
+        """
+        A = self._cache
+        return filter(lambda x: 3 <= x <= 7, A)
+     
 
     def isa(self, num):
         """Gets the next value from the generator function.
@@ -450,13 +471,13 @@ def get_polys(n):
 
 
 def get_perf(dpa):
-	"""Generator to find the perfect, abundant or deficit numbers
+	"""Generator to find the perfect, abundant or deficient numbers
 
 
     :param name: dpa 
-    :param type: string -- set as d for deficit, p for perfect and 
+    :param type: string -- set as d for deficient, p for perfect and 
 							a for abundant
-    :returns:  the next deficit, perfect or abundant number 
+    :returns:  the next deficient, perfect or abundant number 
 				in the sequence
 
     :Example:
