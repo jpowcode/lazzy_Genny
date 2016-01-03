@@ -111,6 +111,13 @@ def setup_palinds():
     global palinds
     palinds = palinds()
     palinds[10]
+    
+
+def setup_arbfuncs():
+    f = lambda n: n**2 +3n -1
+    global arbfuncs
+    arbfuncs = arbfuncs(f)
+    palinds[10]
 """
 ------------------------------------------------------------------------------
 primes test
@@ -721,6 +728,45 @@ def test_palinds_isa():
 @raises(TypeError)
 def test_palinds_raises_type_error():
     palinds[0.5]
+
+"""
+------------------------------------------------------------------------------
+test arbfuncs and its dpendents
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_arbfuncs)
+def test_arbfuncs():
+    assert arbfuncs[0] == -1
+    assert arbfuncs[1] == 3
+    assert arbfuncs[4] == 27
+
+def test_arbfuncs_len():
+    assert len(arbfuncs) == 11
+
+
+def test_arbfuncs_seq():
+    assert arbfuncs.seq()[:5] == [-1, 3, 9, 17, 27]
+
+
+def test_arbfuncs_every():
+    assert arbfuncs.every(2)[:3] == [-1, 9, 27]
+
+
+def test_arbfuncs_between():
+    assert arbfuncs.between(-2, 17) == [-1, 3, 9, 17]
+
+
+def test_arbfuncs_isa():
+    assert arbfuncs.isa(9) == True
+    assert arbfuncs.isa(28) == False
+    assert arbfuncs.isa(16) == False
+
+
+@raises(TypeError)
+def test_arbfuncs_raises_type_error():
+    arbfuncs[0.5]
 
 
 """
