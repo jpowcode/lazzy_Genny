@@ -117,10 +117,13 @@ def setup_arbfuncs():
     f = lambda n: n**2 +3n -1
     global arbfuncs
     global lazcats
+    global catnums
     arbfuncs = arbfuncs(f)
     lazcats = lazcats()
+    catnums = catnums()
     palinds[10]
     lazcats[10]
+    catnums[10]
 """
 ------------------------------------------------------------------------------
 primes test
@@ -747,25 +750,33 @@ def test_arbfuncs():
     assert lazcats[0] == 1
     assert lazcats[1] == 2
     assert lazcats[4] == 11
+    assert catnums[0] == 1
+    assert catnums[1] == 1
+    assert catnums[9] == 4862
+    
 
 def test_arbfuncs_len():
     assert len(arbfuncs) == 11
     assert len(lazcats) == 11
+    assert len(catnums) == 11
 
 
 def test_arbfuncs_seq():
     assert arbfuncs.seq()[:5] == [-1, 3, 9, 17, 27]
     assert lazcats.seq()[:6] == [1, 2, 4, 7, 11, 16]
+    assert catnums.seq()[:10] == [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862]
 
 
 def test_arbfuncs_every():
     assert arbfuncs.every(2)[:3] == [-1, 9, 27]
     assert lazcats.every(3)[:2] == [1, 7]
+    assert catnums.every(4)[:3] == [1, 14, 1430]
 
 
 def test_arbfuncs_between():
     assert arbfuncs.between(-2, 17) == [-1, 3, 9, 17]
     assert lazcats.between(-2, 0) == []
+    assert catnums.between(2, 1500) == [2, 5, 14, 42, 132, 429, 1430]
 
 
 def test_arbfuncs_isa():
@@ -775,6 +786,9 @@ def test_arbfuncs_isa():
     assert lazcats.isa(11) == True
     assert lazcats.isa(0) == False
     assert lazcats.isa(-4) == False
+    assert catnums.isa(132) == True
+    assert catnums.isa(18) == False
+    assert catnums.isa(500) == False
 
 
 @raises(TypeError)
@@ -785,6 +799,10 @@ def test_arbfuncs_raises_type_error():
 @raises(TypeError)
 def test_lazcats_raises_type_error():
     lazcats[0.5]
+    
+@raises(TypeError)
+def test_catnums_raises_type_error():
+    catnums[0.5]
 
 
 """

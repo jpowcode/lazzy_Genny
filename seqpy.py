@@ -737,4 +737,11 @@ def lazcats():
     f = lambda n: (n**2 + n +2) / 2
     return ExpandingSequence(get_arbfuncs(f))
     
+def catnums():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    f = lambda n: reduce(s, k: s*k, range(2, n+1))
+    return ExpandingSequence(get_arbfuncs(f))
+    
 
