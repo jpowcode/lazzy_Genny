@@ -185,29 +185,42 @@ class ExpandingSequence(Sequence):
         else:
             return False
 
-
-class ListOps():
-    """A collection of methods for filtering and opperating on the lists
-    that are output from the generator functions.
+class Seq():
+    """Constructs an object that holds a list and collection of methods for
+    filtering and opperating on the list. The difference between this and a list
+    is that it is imutable. The origonal list will not be changed. The generator
+    function will output an object of this type when the .seq method is called
     """
-    def __init__(self):
-        pass
+    def __init__(self, seq):
+        self.seq = seq
 
-    def between(a, b):
+    def sort(self):
+        new = list(self.seq)
+        new.sort()
+        return Seq(new)
+
+    def reverse(self):
+        new = list(self.seq)
+        new.reverse()
+        return Seq(new)
+
+    def __str__(self):
+        return str(self.seq)
+
+    def between(self, a, b):
         if len(seq) > 0:
             return filter(lambda x: a <= x <= b, seq)
         else:
             return self.seq
 
-    def consecrats(seq):
-        if len(seq) > 0:
-            return [seq[x] / seq[x+1] for x in range(0, len(seq) + 1)]
+    def consecrats(self):
+        if len(self) > 0:
+            return [self[x] / self[x+1] for x in range(0, len(self) + 1)]
         else:
-            return seq
+            return self
 
-    def len():
-        return len(seq)
-
+    def len(self):
+        return len(self.seq)
 
 
 def intersection(*args):
@@ -595,11 +608,13 @@ def polys(n):
         candidate += n - 1 + m*(n - 2)
         m += 1
 
+
 def triangs():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return polys(3)
+
 
 @genwrapper
 def sumfacts(dpa):
@@ -658,6 +673,7 @@ def abunds():
     class
     """
     return sumfacts('a')
+
 
 @genwrapper
 def palinds():
