@@ -111,19 +111,21 @@ def setup_palinds():
     global palinds
     palinds = palinds()
     palinds[10]
-    
+
 
 def setup_arbfuncs():
-    f = lambda n: n**2 +3n -1
+    f = lambda n: n**2 + 3*n -1
     global arbfuncs
     global lazcats
     global catnums
     arbfuncs = arbfuncs(f)
     lazcats = lazcats()
     catnums = catnums()
-    palinds[10]
+    arbfuncs[10]
     lazcats[10]
     catnums[10]
+
+
 """
 ------------------------------------------------------------------------------
 primes test
@@ -753,7 +755,7 @@ def test_arbfuncs():
     assert catnums[0] == 1
     assert catnums[1] == 1
     assert catnums[9] == 4862
-    
+
 
 def test_arbfuncs_len():
     assert len(arbfuncs) == 11
@@ -799,7 +801,7 @@ def test_arbfuncs_raises_type_error():
 @raises(TypeError)
 def test_lazcats_raises_type_error():
     lazcats[0.5]
-    
+
 @raises(TypeError)
 def test_catnums_raises_type_error():
     catnums[0.5]
