@@ -555,6 +555,36 @@ def get_palinds():
         if NumListFor == NumListBack:
             yield candidate
         candidate = candidate + 1
+        
+     
+def get_arb_funcs(f):
+    """Generator to find the nth term in an arbitrary function
+
+
+    :param name: f
+    :param type: function -- an arbitray function of the form f(n)
+    :returns:  the next number in the sequence f(n)
+
+    :Example:
+
+    This is called by using the wrapper function get_arbfuncs
+	Use the functiion f(n) = n^2 + 3n -1
+	
+	>>> f = lambda n: n**2 +3n -1
+    >>> arbfuncs = arbfuncs(f)
+    >>> arbfuncs[4]
+    >>> arbfuncs.seq()
+    >>> len(arbfuncs)
+    8128
+    [-1, 3, 9, 17]
+    4
+    """
+    n = 0
+    while True:
+		yield f(n)
+		n += 1
+
+
 """
 ------------------------------------------------------------------------------
 Wrapper Functions
@@ -691,3 +721,10 @@ def palinds():
     class
     """
     return ExpandingSequence(get_palinds())
+    
+    
+def abfuncs(f):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ExpandingSequence(get_arbfuncs(f))
