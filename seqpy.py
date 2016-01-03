@@ -728,3 +728,13 @@ def abfuncs(f):
     class
     """
     return ExpandingSequence(get_arbfuncs(f))
+    
+
+def lazcats():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    f = lambda n: (n**2 + n +2) / 2
+    return ExpandingSequence(get_arbfuncs(f))
+    
+
