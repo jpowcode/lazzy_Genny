@@ -119,7 +119,7 @@ class ExpandingSequence(Sequence):
         >>> primes.seq()
         [2, 3, 5, 7, 11]
         """
-        return self._cache
+        return Seq(self._cache)
 
     def every(self, n):
         """Constructs a list of the sequence but only every n items
@@ -206,6 +206,9 @@ class Seq():
 
     def __str__(self):
         return str(self.seq)
+
+    def list(self):
+        return self.seq
 
     def between(self, a, b):
         if len(seq) > 0:

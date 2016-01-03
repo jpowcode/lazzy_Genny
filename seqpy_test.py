@@ -141,7 +141,7 @@ def test_primes():
 
 
 def test_primes_seq():
-    assert primes.seq()[:7] == [2, 3, 5, 7, 11, 13, 17]
+    assert primes.seq().list()[:7] == [2, 3, 5, 7, 11, 13, 17]
 
 
 def test_primes_every():
@@ -177,7 +177,7 @@ def test_squares():
 
 
 def test_squares_seq():
-    assert squares.seq()[:11] == [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+    assert squares.seq().list()[:11] == [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 
 
 def test_squares_every():
@@ -226,7 +226,7 @@ def test_powers_3_seq():
     global powers3
     powers3 = powers(3)
     powers3[4]
-    assert powers3.seq() == [0, 1, 8, 27, 64]
+    assert powers3.seq().list() == [0, 1, 8, 27, 64]
 
 
 def test_powers_every():
@@ -271,8 +271,8 @@ def test_recs():
 
 
 def test_recs_seq():
-    assert recs.seq()[:5] == [1, 3, 4, 7, 11]
-    assert fibs.seq()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 21]
+    assert recs.seq().list()[:5] == [1, 3, 4, 7, 11]
+    assert fibs.seq().list()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 21]
 
 
 def test_recs_every():
@@ -324,7 +324,7 @@ def test_happys():
 
 
 def test_happys_seq():
-    assert happys.seq()[:5] == [1, 7, 10, 13, 19]
+    assert happys.seq().list()[:5] == [1, 7, 10, 13, 19]
 
 
 def test_happys_every():
@@ -366,8 +366,8 @@ def test_mults():
 
 
 def test_mults_seq():
-    assert mults.seq()[:9] == [0, 5, 10, 15, 20, 25, 30, 35, 40]
-    assert evens.seq()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16]
+    assert mults.seq().list()[:9] == [0, 5, 10, 15, 20, 25, 30, 35, 40]
+    assert evens.seq().list()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16]
 
 
 def test_mults_every():
@@ -422,8 +422,8 @@ def test_ariths():
 
 
 def test_ariths_seq():
-    assert ariths.seq()[:6] == [2, 5, 8, 11, 14, 17]
-    assert odds.seq()[:7] == [1, 3, 5, 7, 9, 11, 13]
+    assert ariths.seq().list()[:6] == [2, 5, 8, 11, 14, 17]
+    assert odds.seq().list()[:7] == [1, 3, 5, 7, 9, 11, 13]
 
 
 def test_ariths_every():
@@ -474,7 +474,7 @@ def test_geoms():
 
 
 def test_geoms_seq():
-    assert geoms.seq()[:6] == [2, 6, 18, 54, 162, 486]
+    assert geoms.seq().list()[:6] == [2, 6, 18, 54, 162, 486]
 
 
 def test_geoms_every():
@@ -514,7 +514,7 @@ def test_ndigits():
 
 
 def test_ndigits_seq():
-    assert ndigits.seq()[:6] == [100, 101, 102, 103, 104, 105]
+    assert ndigits.seq().list()[:6] == [100, 101, 102, 103, 104, 105]
 
 
 def test_ndigits_every():
@@ -555,7 +555,7 @@ def test_facts():
 
 
 def test_facts_seq():
-    assert facts.seq()[:6] == [1, 1, 2, 6, 24, 120]
+    assert facts.seq().list()[:6] == [1, 1, 2, 6, 24, 120]
 
 
 def test_facts_every():
@@ -597,8 +597,8 @@ def test_polys():
     assert triangs[4] == 15
 
 def test_polys_seq():
-    assert polys.seq()[:5] == [1, 5, 12, 22, 35]
-    assert triangs.seq()[:5] == [1, 3, 6, 10, 15]
+    assert polys.seq().list()[:5] == [1, 5, 12, 22, 35]
+    assert triangs.seq().list()[:5] == [1, 3, 6, 10, 15]
 
 
 def test_polys_every():
@@ -656,9 +656,9 @@ def test_perfs_len():
 
 
 def test_perfs_seq():
-    assert perfs.seq()[:3] == [6, 28, 496]
-    assert abunds.seq()[:4] == [12, 18, 20, 24]
-    assert defics.seq()[:4] == [1, 2, 3, 4]
+    assert perfs.seq().list()[:3] == [6, 28, 496]
+    assert abunds.seq().list()[:4] == [12, 18, 20, 24]
+    assert defics.seq().list()[:4] == [1, 2, 3, 4]
 
 
 def test_perfs_every():
@@ -716,7 +716,7 @@ def test_palinds_len():
 
 
 def test_palinds_seq():
-    assert palinds.seq()[:11] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22]
+    assert palinds.seq().list()[:11] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22]
 
 
 def test_palinds_every():
@@ -764,9 +764,9 @@ def test_arbfuncs_len():
 
 
 def test_arbfuncs_seq():
-    assert arbfuncs.seq()[:5] == [-1, 3, 9, 17, 27]
-    assert lazcats.seq()[:6] == [1, 2, 4, 7, 11, 16]
-    assert catnums.seq()[:10] == [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862]
+    assert arbfuncs.seq().list()[:5] == [-1, 3, 9, 17, 27]
+    assert lazcats.seq().list()[:6] == [1, 2, 4, 7, 11, 16]
+    assert catnums.seq().list()[:10] == [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862]
 
 
 def test_arbfuncs_every():
