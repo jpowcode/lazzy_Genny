@@ -1,5 +1,50 @@
 from collections import Sequence
+from functools import wraps
+from datetime import datetime as dt
+import logging
 
+logging.basicConfig(format='%(message)s',level=logging.NOTSET)
+
+"""
+------------------------------------------------------------------------------
+Decorators
+------------------------------------------------------------------------------
+"""
+
+
+def timeit(interceptedFunction):
+    """A decorator that intercepts a function and it's arguments *args
+    and **kwargs times the duration of thefunction and then returns it
+    and logs it to the terminal
+    """
+
+    @wraps(interceptedFunction)
+    def timer(*args, **kwargs):
+        functionName = interceptedFunction.func_name
+        start = dt.now()
+        actualResult = interceptedFunction(*args, **kwargs)
+        stop = dt.now()
+        executionTime = stop - start
+        logging.debug('Function: [{fnc}] => Took [{timed}]'
+                      .format(fnc=functionName, timed=executionTime))
+
+        return actualResult
+
+    return timer
+
+
+def genwrapper(interceptedFunction):
+    @wraps(interceptedFunction)
+    def wrapper(*args, **kwargs):
+        actualResult = ExpandingSequence(interceptedFunction(*args, **kwargs))
+        return actualResult
+    return wrapper
+
+"""
+------------------------------------------------------------------------------
+Sequence container definition
+------------------------------------------------------------------------------
+"""
 
 class ExpandingSequence(Sequence):
     """A container class to add methods to the generator functions.
@@ -136,6 +181,30 @@ class ExpandingSequence(Sequence):
             return True
         else:
             return False
+
+
+class ListOps():
+    """A collection of methods for filtering and opperating on the lists
+    that are output from the generator functions.
+    """
+    def __init__(self):
+        pass
+
+    def between(a, b):
+        if len(seq) > 0:
+            return filter(lambda x: a <= x <= b, seq)
+        else:
+            return self.seq
+
+    def consecrats(seq):
+        if len(seq) > 0:
+            return [seq[x] / seq[x+1] for x in range(0, len(seq) + 1)]
+        else:
+            return seq
+
+    def len():
+        return len(seq)
+
 
 
 def intersection(*args):
@@ -527,7 +596,7 @@ def get_perfs(dpa):
             yield candidate
         candidate += 1
 
-
+@genwrapper
 def get_palinds():
     """Generator to find pallindromic numbers
 
@@ -555,8 +624,8 @@ def get_palinds():
         if NumListFor == NumListBack:
             yield candidate
         candidate = candidate + 1
-        
-     
+
+
 def get_arb_funcs(f):
     """Generator to find the nth term in an arbitrary function
 
@@ -568,9 +637,9 @@ def get_arb_funcs(f):
     :Example:
 
     This is called by using the wrapper function get_arbfuncs
-	Use the functiion f(n) = n^2 + 3n -1
-	
-	>>> f = lambda n: n**2 +3n -1
+    Use the functiion f(n) = n^2 + 3n -1
+
+    >>> f = lambda n: n**2 +3n -1
     >>> arbfuncs = arbfuncs(f)
     >>> arbfuncs[4]
     >>> arbfuncs.seq()
@@ -581,8 +650,8 @@ def get_arb_funcs(f):
     """
     n = 0
     while True:
-		yield f(n)
-		n += 1
+        yield f(n)
+        n += 1
 
 
 """
@@ -716,19 +785,19 @@ def abunds():
     return ExpandingSequence(get_perfs('a'))
 
 
-def palinds():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_palinds())
-    
-    
+# def palinds():
+#     """A wrapper function, creates an object using ExpandingSequence
+#     class
+#     """
+#     return ExpandingSequence(get_palinds())
+
+
 def abfuncs(f):
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     return ExpandingSequence(get_arbfuncs(f))
-    
+
 
 def lazcats():
     """A wrapper function, creates an object using ExpandingSequence
@@ -736,12 +805,10 @@ def lazcats():
     """
     f = lambda n: (n**2 + n +2) / 2
     return ExpandingSequence(get_arbfuncs(f))
-    
+
 def catnums():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    f = lambda n: reduce(s, k: s*k, range(2, n+1))
+    f = lambda n: reduce(lambda s, k: s*k, range(2, n+1))
     return ExpandingSequence(get_arbfuncs(f))
-    
-
