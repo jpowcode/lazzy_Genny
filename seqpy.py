@@ -1,6 +1,7 @@
 from collections import Sequence
 from functools import wraps
 from datetime import datetime as dt
+from math import factorial
 import logging
 
 logging.basicConfig(format='%(message)s',level=logging.NOTSET)
@@ -34,6 +35,8 @@ def timeit(interceptedFunction):
 
 
 def genwrapper(interceptedFunction):
+    """A decorator to wrap the get_ functions below into a usable form
+    """
     @wraps(interceptedFunction)
     def wrapper(*args, **kwargs):
         actualResult = ExpandingSequence(interceptedFunction(*args, **kwargs))
@@ -235,8 +238,14 @@ def intersection(*args):
     A.sort()
     return A
 
+"""
+------------------------------------------------------------------------------
+Generator Functions
+------------------------------------------------------------------------------
+"""
 
-def get_primes():
+@genwrapper
+def primes():
     """Generator to find the prime numbers
 
     This uses the seive of Erathosens algorithm
@@ -267,7 +276,8 @@ def get_primes():
         candidate += 1
 
 
-def get_squares():
+@genwrapper
+def squares():
     """Generator to find the square numbers
 
 
@@ -293,8 +303,8 @@ def get_squares():
         yield candidate*candidate
         candidate += 1
 
-
-def get_powers(n):
+@genwrapper
+def powers(n):
     """Generator to find the powers of a number
 
 
@@ -319,8 +329,8 @@ def get_powers(n):
         yield candidate**n
         candidate += 1
 
-
-def get_recs(n, a, b):
+@genwrapper
+def recs(n, a, b):
     """Generator to find arbitrary recursive sequences.
 
     These are seuences that add the previous two terms in the sequence
@@ -357,7 +367,14 @@ def get_recs(n, a, b):
         a, b, n = b, a+b, n-1
 
 
-def get_happys():
+def fibs(n):
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return recs(n, 0, 1)
+
+@genwrapper
+def happys():
     """Generator to find the happy numbers
 
 
@@ -390,8 +407,8 @@ def get_happys():
             yield candidate
         candidate += 1
 
-
-def get_mults(n):
+@genwrapper
+def mults(n):
     """Generator to find multiples of a number
 
 
@@ -418,7 +435,15 @@ def get_mults(n):
         candidate += 1
 
 
-def get_ariths(a, d):
+def evens():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return mults(2)
+
+
+@genwrapper
+def ariths(a, d):
     """Generator to find an arithmetic sequence
 
 
@@ -446,7 +471,15 @@ def get_ariths(a, d):
         candidate += d
 
 
-def get_geoms(a, r):
+def odds():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return ariths(1, 2)
+
+
+@genwrapper
+def geoms(a, r):
     """Generator to find a geometric sequence
 
 
@@ -474,7 +507,8 @@ def get_geoms(a, r):
         candidate *= r
 
 
-def get_ndigits(n):
+@genwrapper
+def ndigits(n):
     """Generator to find numbers with n digits
 
 
@@ -500,7 +534,8 @@ def get_ndigits(n):
         candidate += 1
 
 
-def get_facts():
+@genwrapper
+def facts():
     """Generator to find the factorial numbers
 
 
@@ -531,7 +566,8 @@ def get_facts():
             n = n + 1
 
 
-def get_polys(n):
+@genwrapper
+def polys(n):
     """Generator to find polygonal numbers
 
 
@@ -559,8 +595,14 @@ def get_polys(n):
         candidate += n - 1 + m*(n - 2)
         m += 1
 
+def triangs():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return polys(3)
 
-def get_perfs(dpa):
+@genwrapper
+def sumfacts(dpa):
     """Generator to find the perfect, abundant or deficient numbers
 
 
@@ -596,8 +638,29 @@ def get_perfs(dpa):
             yield candidate
         candidate += 1
 
+
+def perfs():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return sumfacts('p')
+
+
+def defics():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return sumfacts('d')
+
+
+def abunds():
+    """A wrapper function, creates an object using ExpandingSequence
+    class
+    """
+    return sumfacts('a')
+
 @genwrapper
-def get_palinds():
+def palinds():
     """Generator to find pallindromic numbers
 
 
@@ -626,7 +689,8 @@ def get_palinds():
         candidate = candidate + 1
 
 
-def get_arb_funcs(f):
+@genwrapper
+def arbfuncs(f):
     """Generator to find the nth term in an arbitrary function
 
 
@@ -639,7 +703,7 @@ def get_arb_funcs(f):
     This is called by using the wrapper function get_arbfuncs
     Use the functiion f(n) = n^2 + 3n -1
 
-    >>> f = lambda n: n**2 +3n -1
+    >>> f = lambda n: n**2 +3*n -1
     >>> arbfuncs = arbfuncs(f)
     >>> arbfuncs[4]
     >>> arbfuncs.seq()
@@ -654,161 +718,17 @@ def get_arb_funcs(f):
         n += 1
 
 
-"""
-------------------------------------------------------------------------------
-Wrapper Functions
-------------------------------------------------------------------------------
-"""
-
-
-def primes():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_primes())
-
-
-def squares():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_squares())
-
-
-def powers(n):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_powers(n))
-
-
-def recs(n, a, b):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_recs(n, a, b))
-
-
-def fibs(n):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_recs(n, 0, 1))
-
-
-def happys():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_happys())
-
-
-def mults(n):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_mults(n))
-
-
-def evens():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_mults(2))
-
-
-def ariths(a, d):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_ariths(a, d))
-
-
-def odds():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_ariths(1, 2))
-
-
-def geoms(a, r):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_geoms(a, r))
-
-
-def ndigits(n):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_ndigits(n))
-
-
-def facts():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_facts())
-
-def polys(n):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_polys(n))
-
-def triangs():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_polys(3))
-
-
-def perfs():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_perfs('p'))
-
-
-def defics():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_perfs('d'))
-
-
-def abunds():
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_perfs('a'))
-
-
-# def palinds():
-#     """A wrapper function, creates an object using ExpandingSequence
-#     class
-#     """
-#     return ExpandingSequence(get_palinds())
-
-
-def abfuncs(f):
-    """A wrapper function, creates an object using ExpandingSequence
-    class
-    """
-    return ExpandingSequence(get_arbfuncs(f))
-
-
 def lazcats():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
     f = lambda n: (n**2 + n +2) / 2
-    return ExpandingSequence(get_arbfuncs(f))
+    return arbfuncs(f)
+
 
 def catnums():
     """A wrapper function, creates an object using ExpandingSequence
     class
     """
-    f = lambda n: reduce(lambda s, k: s*k, range(2, n+1))
-    return ExpandingSequence(get_arbfuncs(f))
+    f = lambda n: factorial(2*n)/(factorial(n+1)*factorial(n))
+    return arbfuncs(f)
