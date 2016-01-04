@@ -208,9 +208,6 @@ def intersection(*args):
     [7, 13, 19, 23, 31, 79, 97, 103, 109, 139, 167, 193, 239, 263, 293, 313,
     331, 367, 379, 383, 397, 409, 487]
     """
-    # Args = []
-    # for arg in args:
-    #     Args.append(arg)
 
     gens = []
     for gen in args:
@@ -232,14 +229,44 @@ def intersection(*args):
         candidate += 1
 
 
-    # A = []
-    # for arg in args:
-    #     A.append(set(arg))
-    #
-    # A = reduce(lambda x, y: x & y, A)
-    # A = list(A)
-    # A.sort()
-    # return A
+@genwrapper
+def union(*args):
+    """Finds numbers in either of two or more sequences.
+
+    :param name: args.
+    :type name: list -- of lists.
+    :returns:  generator -- containing numbers in any of the sequences
+
+    :Example:
+
+    To find numbers that are both happy and prime
+
+    >>> happys = happys()
+    >>> primes = primes()
+    >>> happyORprimes = union(happys, primes)
+    >>> happyORprimes[10]
+
+    [1, 2, 3, 5, 7, 10, 11, 13, 17, 19, 23]
+    """
+
+    gens = []
+    for gen in args:
+        try:
+            gen[1]
+
+        except:
+            gen = gen()
+        gens.append(gen)
+
+    candidate = 0
+    while True:
+        logic = False
+        for gen in gens:
+            logic = logic + gen.isa(candidate) # if one evaluates to false logic is false
+        if logic:
+            yield candidate
+
+        candidate += 1
 
 
 @genwrapper
@@ -294,7 +321,7 @@ def every(gen, d):
 
     >>> palinds2 = every(palinds, 2)
     >>> primes[10]
-    [1, 3, 5, 7, 9, 22, 44, 88, 101, 121]
+    [1, 3, 5, 7, 9, 22, 44, 88, 101, 12]
     """
     n = 0
     try:
