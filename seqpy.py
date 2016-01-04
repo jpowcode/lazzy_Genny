@@ -107,7 +107,7 @@ class ExpandingSequence(Sequence):
         return itname.__doc__
 
     def seq(self):
-        """Constructs a list of the sequence.
+        """Constructs an object of type Seq of the sequence.
 
         :param name: None
         :returns:  list -- contains the values of the sequence
@@ -121,21 +121,6 @@ class ExpandingSequence(Sequence):
         """
         return Seq(self._cache)
 
-    def every(self, n):
-        """Constructs a list of the sequence but only every n items
-
-        :param name: n
-        :param type: int
-        :returns:  list -- contains the values of the sequence every n items
-
-        :Example:
-
-        >>> primes = primes()
-        >>> primes[7]
-        >>> primes.every(2)
-        [2, 5, 11, 17]
-        """
-        return self._cache[::n]
 
     def between(self, a, b):
         """Constructs a list of the sequence between the values a and b.
@@ -194,6 +179,9 @@ class Seq():
     def __init__(self, seq):
         self.seq = seq
 
+    def __str__(self):
+        return str(self.seq)
+
     def sort(self):
         new = list(self.seq)
         new.sort()
@@ -204,23 +192,15 @@ class Seq():
         new.reverse()
         return Seq(new)
 
-    def __str__(self):
-        return str(self.seq)
+    def between(self, a, b):
+        new = list(self.seq)
+        if len(new) > 0:
+            return Seq(filter(lambda x: a <= x <= b, new))
+        else:
+            return Seq(new)
 
     def list(self):
         return self.seq
-
-    def between(self, a, b):
-        if len(seq) > 0:
-            return filter(lambda x: a <= x <= b, seq)
-        else:
-            return self.seq
-
-    def consecrats(self):
-        if len(self) > 0:
-            return [self[x] / self[x+1] for x in range(0, len(self) + 1)]
-        else:
-            return self
 
     def len(self):
         return len(self.seq)
@@ -259,6 +239,71 @@ def intersection(*args):
 Generator Functions
 ------------------------------------------------------------------------------
 """
+
+@genwrapper
+def consecratios(gen, d=2):
+    """Generator to find the ratios of consecutive terms
+    e.g for [t1, t2, t3, t4 ...]
+    returns [t2/t1, t3/t2, t4/t3 ...]
+
+    :param name: gen
+    :param type: generator
+    :param name: d
+    :param type: int -- number of decimal places to round to default = 2
+    :returns:  int -- the next consecutive ration in the sequence.
+    :raises: AttributeError, KeyError
+
+    :Example:
+
+    >>> consecratios = consecratios(primes)
+    >>> consecratios[4]
+    >>> consecratios.seq()
+    >>> len(consecratios)
+
+    1.57
+    [1.5, 1.67, 1.4, 1.57]
+    5
+    """
+    n=1
+    try:
+        gen[n]
+    except:
+        gen = gen()
+
+    while True:
+        gen[n]
+        print gen[n]
+        yield round(gen[n]*1.0/gen[n-1], d)
+        n +=1
+
+
+@genwrapper
+def every(gen, d):
+    """Constructs a generator of the sequence but only every n items
+
+    :param name: d
+    :param type: int
+    :param name: gen
+    :param type: generator
+
+    :returns:  list -- contains the values of the sequence every n items
+
+    :Example:
+
+    >>> palinds2 = every(palinds, 2)
+    >>> primes[10]
+    [1, 3, 5, 7, 9, 22, 44, 88, 101, 121]
+    """
+    n = 0
+    try:
+        gen[1]
+    except:
+        gen = gen()
+    while True:
+        if n % d == 0:
+            yield gen[n]
+        n += 1
+
 
 @genwrapper
 def primes():
