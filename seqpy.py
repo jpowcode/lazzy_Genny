@@ -122,30 +122,6 @@ class ExpandingSequence(Sequence):
         return Seq(self._cache)
 
 
-    def between(self, a, b):
-        """Constructs a list of the sequence between the values a and b.
-
-        :param name: a
-        :param type: int -- lower bound
-        :param name: b
-        :param type: int -- upper bound
-        :returns:  list -- contains the values of the sequence between
-                            a and b
-
-        :Example:
-
-        >>> primes = primes()
-        >>> primes[5]
-        >>> primes.seq().between(3, 7)
-        [3, 5, 7]
-        """
-        if not self._cache:     #check if cahce is empty to avoid errors
-            self._cache.append(next(self.it))
-        while self._cache[-1] < b:
-            self._cache.append(next(self.it))
-        return filter(lambda x: a <= x <= b, self._cache)
-
-
     def isa(self, num):
         """Gets the next value from the generator function.
 
@@ -206,12 +182,19 @@ class Seq():
         return len(self.seq)
 
 
+
+"""
+------------------------------------------------------------------------------
+Generator Functions
+------------------------------------------------------------------------------
+"""
+@genwrapper
 def intersection(*args):
     """Finds numbers common to two or more sequences.
 
     :param name: args.
     :type name: list -- of lists.
-    :returns:  list -- containing numbers common to all sequences
+    :returns:  generator -- containing numbers common to all sequences
 
     :Example:
 
@@ -219,26 +202,45 @@ def intersection(*args):
 
     >>> happys = happys()
     >>> primes = primes()
-    >>> happys[100]
-    >>> primes[100]
-    >>> intersection(happys.seq(), primes.seq())
+    >>> happyprimes = intersection(happys, primes)
+    >>> happyprimes[100]
+
     [7, 13, 19, 23, 31, 79, 97, 103, 109, 139, 167, 193, 239, 263, 293, 313,
     331, 367, 379, 383, 397, 409, 487]
     """
-    A = []
-    for arg in args:
-        A.append(set(arg))
+    # Args = []
+    # for arg in args:
+    #     Args.append(arg)
 
-    A = reduce(lambda x, y: x & y, A)
-    A = list(A)
-    A.sort()
-    return A
+    gens = []
+    for gen in args:
+        try:
+            gen[1]
 
-"""
-------------------------------------------------------------------------------
-Generator Functions
-------------------------------------------------------------------------------
-"""
+        except:
+            gen = gen()
+        gens.append(gen)
+
+    candidate = 0
+    while True:
+        logic = True
+        for gen in gens:
+            logic = logic * gen.isa(candidate) # if one evaluates to false logic is false
+        if logic:
+            yield candidate
+
+        candidate += 1
+
+
+    # A = []
+    # for arg in args:
+    #     A.append(set(arg))
+    #
+    # A = reduce(lambda x, y: x & y, A)
+    # A = list(A)
+    # A.sort()
+    # return A
+
 
 @genwrapper
 def consecratios(gen, d=2):
