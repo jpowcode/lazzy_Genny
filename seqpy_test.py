@@ -126,6 +126,59 @@ def setup_arbfuncs():
     catnums[10]
 
 
+def setup_mersennes():
+    global mersennes
+    mersennes = mersennes()
+    mersennes[10]
+
+
+def setup_merprimes():
+    global merprimes
+    merprimes = merprimes()
+    merprimes[10]
+
+
+def setup_looksays():
+    global looksays
+    looksays = looksays()
+    looksays[10]
+
+
+def setup_pis():
+    global pis
+    pis = pis()
+    pis[10]
+
+
+def setup_harshads():
+    global harshads
+    harshads = harshads()
+    harshads[10]
+
+
+def setup_consecratios():
+    global consecratios
+    consecratios = consecratios(fibs, 2)
+    consecratios[10]
+
+
+def setup_intersection():
+    global intersection
+    intersection = intersection(fibs, primes)
+    intersection[10]
+
+
+def setup_union():
+    global union
+    union = union(fibs, primes)
+    union[10]
+
+
+def setup_mods():
+    global mods
+    mods = mods(fibs, 3)
+    mods[10]
+
 """
 ------------------------------------------------------------------------------
 primes test
@@ -805,6 +858,255 @@ def test_lazcats_raises_type_error():
 @raises(TypeError)
 def test_catnums_raises_type_error():
     catnums[0.5]
+
+
+"""
+------------------------------------------------------------------------------
+test Mersennes
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_mersennes)
+def test_mersennes():
+    assert mersennes[0] == 1
+    assert mersennes[1] == 1
+    assert mersennes[4] == 15
+
+def test_mersennes_len():
+    assert len(mersennes) == 11
+
+
+def test_mersennes_seq():
+    assert mersennes.seq().list()[:11] == [0, 1, 3, 7, 15]
+
+
+def test_mersennes_every():
+    assert mersennes.every(2)[:11] == [0, 3, 15]
+
+
+def test_mersennes_between():
+    assert mersennes.between(1, 6) == [1, 3]
+
+
+def test_mersennes_isa():
+    assert mersennes.isa(3) == True
+    assert mersennes.isa(5) == False
+    assert mersennes.isa(16) == False
+
+
+@raises(TypeError)
+def test_mersennes_raises_type_error():
+    mersennes[0.5]
+
+
+"""
+------------------------------------------------------------------------------
+test merprimes
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_merprimes)
+def test_mersennes():
+    assert merprimes[0] == 2
+    assert merprimes[1] == 3
+    assert merprimes[9] == 257
+
+def test_merprimes_len():
+    assert len(merprimes) == 11
+
+
+def test_merprimes_seq():
+    assert merprimes.seq().list()[:10] == [2, 3, 5, 7, 13, 17, 19, 67, 127, 257]
+
+
+def test_merprimes_every():
+    assert merprimes.every(4)[:3] == [2, 13, 127]
+
+
+def test_merprimes_between():
+    assert merprimes.between(-5, 0) == []
+
+
+def test_merprimes_isa():
+    assert merprimes.isa(17) == True
+    assert merprimes.isa(68) == False
+    assert merprimes.isa(259) == False
+
+
+@raises(TypeError)
+def test_merprimes_raises_type_error():
+    merprimes[0.5]
+
+
+"""
+------------------------------------------------------------------------------
+test looksays
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_looksays)
+def test_looksays():
+    assert looksays[0] == 1
+    assert looksays[1] == 11
+    assert looksays[3] == 1211
+
+def test_looksays_len():
+    assert len(looksays) == 11
+
+
+def test_looksays_seq():
+    assert looksays.seq().list()[:6] == [1, 11, 21, 1211, 111221, 312211]
+
+
+def test_looksays_every():
+    assert looksays.every(1)[:2] == [1]
+
+
+def test_looksays_between():
+    assert looksays.between(1000, 1500) == [1211]
+
+
+def test_looksays_isa():
+    assert looksays.isa(21) == True
+    assert looksays.isa(68) == False
+    assert looksays.isa(259) == False
+
+
+@raises(TypeError)
+def test_looksays_raises_type_error():
+    looksays[0.5]
+
+
+"""
+------------------------------------------------------------------------------
+test pis
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_pis)
+def test_pis():
+    assert pis[0] == 3
+    assert pis[1] == 1
+    assert pis[3] == 1
+
+def test_pis_len():
+    assert len(pis) == 11
+
+
+def test_pis_seq():
+    assert pis.seq().list()[:6] == [3, 1, 4, 1, 5, 9]
+
+
+def test_pis_every():
+    assert pis.every(2)[:2] == [3, 1]
+
+
+def test_pis_isa():
+    assert pis.isa(2) == True
+    assert pis.isa(68) == False
+    assert pis.isa(0) == False
+
+
+@raises(TypeError)
+def test_pis_raises_type_error():
+    pis[0.5]
+
+
+"""
+------------------------------------------------------------------------------
+test harshads
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_harshads)
+def test_harshads():
+    assert harshads[0] == 1
+    assert harshads[1] == 2
+    assert harshads[10] == 12
+
+def test_harshads_len():
+    assert len(harshads) == 11
+
+
+def test_harshads_seq():
+    assert harshads.seq().list()[:6] == [1, 2, 3, 4, 5, 6, 7]
+
+
+def test_harshads_every():
+    assert harshads.every(3)[:5] == [1, 4, 7, 10, 20, 24, 30]
+
+
+def test_harshads_between():
+    assert harshads.between(5, 10) == [7, 10]
+
+
+def test_harshads_isa():
+    assert harshads.isa(117) == True
+    assert harshads.isa(134) == False
+    assert harshads.isa(173) == False
+
+
+@raises(TypeError)
+def test_harshads_raises_type_error():
+    harshads[0.5]
+
+"""
+------------------------------------------------------------------------------
+test intersection
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_intersection)
+def test_intersection():
+    assert intersection[0] == 2
+    assert intersection[1] == 3
+    assert intersection[3] == 13
+
+
+def test_intersection_seq
+    assert intersection.seq().list()[:3] == [2, 3, 5, 13]
+
+
+"""
+------------------------------------------------------------------------------
+test union
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_union)
+def test_union():
+    assert union[0] == 0
+    assert union[1] == 1
+    assert union[7] == 11
+
+def test_union_seq():
+    assert union.seq().list()[:7] == [0, 1, 2, 3, 5, 7, 8, 11]
+
+
+"""
+------------------------------------------------------------------------------
+test consecratios
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_consecratio)
+def test_consecratio():
+    assert consecratios[0] == None
+    assert consecratios[1] == 1
+    assert consecratios[5] == 1.6
+
+def test_consecratios_seq():
+    assert consecratios.seq().list()[:5] == [None, 1, 2, 1.5, 1.67, 1.6]
+
+
 
 
 """

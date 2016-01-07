@@ -2,6 +2,7 @@ from collections import Sequence
 from functools import wraps
 from datetime import datetime as dt
 from math import factorial
+from itertools import groupby, count, islice
 import logging
 
 logging.basicConfig(format='%(message)s',level=logging.NOTSET)
@@ -137,7 +138,7 @@ class ExpandingSequence(Sequence):
         >>> happys.isa(19)
         True
         """
-        if not self._cache:     #check if cahce is empty to avoid errors
+        if not self._cache:     #check if cache is empty to avoid errors
             self._cache.append(next(self.it))
         while self._cache[-1] < num:
             self._cache.append(next(self.it))
@@ -302,7 +303,10 @@ def consecratios(gen, d=2):
     while True:
         gen[n]
         print gen[n]
-        yield round(gen[n]*1.0/gen[n-1], d)
+        try:
+            yield round(gen[n]*1.0/gen[n-1], d)
+        except:
+            yield None
         n +=1
 
 
@@ -825,3 +829,204 @@ def catnums():
     """
     f = lambda n: factorial(2*n)/(factorial(n+1)*factorial(n))
     return arbfuncs(f)
+
+
+@genwrapper
+def mersennes(f):
+    """Generator to find the nth Mersenne number
+
+
+    :param name: None
+    :returns:  the next Mersenne number in the sequence
+
+    :Example:
+
+    >>> mersennes = mersennes()
+    >>> mersennes[4]
+    >>> mersennes.seq()
+    >>> len(mersennes)
+
+    15
+    [0, 1, 3, 7, 15]
+    4
+    """
+    n = 0
+    while True:
+        yield f(n)
+        n += 1
+
+
+@genwrapper
+def merprimes(f):
+    """Generator to find the nth Mercenne Prime number
+
+
+    :param name: None
+    :returns:  the next Mersenne Prime number in the sequence
+
+    :Example:
+
+    >>> merprimes = merprimes()
+    >>> merprimes[10]
+    >>> merprime.seq()
+    >>> len(merprime)
+
+    257
+    [2, 3, 5, 7, 13, 17, 19, 31, 67, 127, 257]
+    11
+    """
+
+    try:
+        primes[1]
+        mersennes[1]
+
+    except:
+        primes = primes()
+        mersennes = mersennes()
+
+    def ismerc(n):
+        if not primes.isa(n):
+                return False
+        if n == 1:
+                return False
+        if n == 2:
+                return True
+        m = mersennes[n]
+        x = 4
+        for i in range(n-2):
+                x = (x * x - 2) % m
+        return x == 0
+
+    candidate = 1
+
+    while True:
+        if ismerc(candidate):
+            yield candidate
+        candidate += 1
+
+@genwrapper
+def mods(gen, div):
+    """Generator to find the nth remainder of the given generator when
+    divided by div
+
+
+    :param name: gen
+    :param type: generator
+    :param name: div
+    :param type: int -- the divisor
+
+    :returns:  the remainder of next number in the generators sequence
+    when divided by div
+
+    :Example:
+
+    >>> fibs[10]
+    >>> fibs.seq()
+    >>> modfibs3 = mods(fibs, 3)
+    >>> modfibs3[10]
+    >>> modfibs3.seq()
+
+    89
+    [0, 1, 1, 2 ,3, 5, 8, 13, 21, 34, 55, 89]
+    1
+    [0, 1, 1, 2, 0, 2, 2, 1, 0, 1, 1]
+    """
+
+    try:
+        gen[1]
+
+    except:
+        gen = gen()
+
+    n = 0
+    while True:
+        yield gen[n] % div
+        n += 1
+
+
+@genwrapper
+def looksays():
+    """Generator to find the look and say sequence
+
+
+    :param name: None
+    :returns:  the next look and say number in the sequence
+
+    :Example:
+
+    >>> looksays = looksays()
+    >>> looksays[5]
+    >>> looksays.seq()
+    >>> len(looksays)
+
+    312211
+    [1, 11, 21, 1211, 111221, 312211]
+    5
+    """
+
+    numberstring='1'
+    while True:
+        numberstring = ''.join( str(len(list(g))) + k
+                    for k,g in groupby(numberstring) )
+        yield numberstring
+
+
+@genwrapper
+def pis():
+    """Generator to find the digits of pi
+
+
+    :param name: None
+    :returns:  the next digit of pi
+
+    :Example:
+
+    >>> pis = pis()
+    >>> pis[5]
+    >>> pis.seq()
+    >>> len(pis)
+
+    9
+    [3, 1, 4, 1, 5, 9]
+    5
+    """
+
+    q, r, t, k, n, l = 1, 0, 1, 1, 3, 3
+    while True:
+        if 4*q+r-t < n*t:
+            yield n
+            nr = 10*(r-n*t)
+            n  = ((10*(3*q+r))//t)-10*n
+            q  *= 10
+            r  = nr
+        else:
+            nr = (2*q+r)*l
+            nn = (q*(7*k)+2+(r*l))//(t*l)
+            q  *= k
+            t  *= l
+            l  += 2
+            k += 1
+            n  = nn
+            r  = nr
+
+
+@genwrapper
+def harshads():
+    """Generator to find the Harshad numbers
+
+
+    :param name: None
+    :returns:  the next Harshad number
+
+    :Example:
+
+    >>> harshads = harshads()
+    >>> harshads[4]
+    >>> harshads.seq()
+    >>> len(harshads)
+
+    8
+    [1, 2, 3, 4, 5, 6, ,7]
+    7
+    """
+    yield (n for n in count(1) if n % sum(int(ch) for ch in str(n)) == 0)
