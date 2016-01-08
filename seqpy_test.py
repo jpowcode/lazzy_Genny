@@ -1,13 +1,14 @@
 from nose import with_setup
 from nose.tools import raises
 from seqpy import *
+from generators import Generators
 
 """
 ------------------------------------------------------------------------------
 setup and teardown functions
 ------------------------------------------------------------------------------
 """
-
+G = Generators()
 
 def setup_module(module):
     print " "
@@ -19,13 +20,13 @@ def teardown_module(module):
 
 def setup_primes():
     global primes
-    primes = primes()
+    primes = G.primes()
     primes[10]
 
 
 def setup_squares():
     global squares
-    squares = squares()
+    squares = G.squares()
     squares[25]
 
 
@@ -77,7 +78,7 @@ def setup_geoms():
 def setup_ndigits():
     global ndigits
     ndigits = ndigits(3)
-    ndigits[10]
+    ndigits[500]
 
 
 def setup_facts():
@@ -128,13 +129,13 @@ def setup_arbfuncs():
 
 def setup_mersennes():
     global mersennes
-    mersennes = mersennes()
+    mersennes = G.mersennes()
     mersennes[10]
 
 
 def setup_merprimes():
     global merprimes
-    merprimes = merprimes()
+    merprimes = G.merprimes()
     merprimes[10]
 
 
@@ -158,26 +159,35 @@ def setup_harshads():
 
 def setup_consecratios():
     global consecratios
-    consecratios = consecratios(fibs, 2)
+    consecratios = consecratios(happys, 2)
     consecratios[10]
 
 
 def setup_intersection():
     global intersection
-    intersection = intersection(fibs, primes)
+    intersection = intersection(happys, primes)
     intersection[10]
 
 
 def setup_union():
     global union
-    union = union(fibs, primes)
+    union = union(happys, primes)
     union[10]
 
 
 def setup_mods():
     global mods
-    mods = mods(fibs, 3)
+    mods = mods(happys, 3)
     mods[10]
+
+
+def setup_every():
+    global every3
+    global every1
+    every3 = every(primes, 3)
+    every1 = every(primes, 1)
+    every3[10]
+    every1[10]
 
 """
 ------------------------------------------------------------------------------
@@ -195,10 +205,6 @@ def test_primes():
 
 def test_primes_seq():
     assert primes.seq().list()[:7] == [2, 3, 5, 7, 11, 13, 17]
-
-
-def test_primes_every():
-    assert primes.every(2)[:4] == [2, 5, 11, 17]
 
 
 def test_primes_len():
@@ -233,12 +239,8 @@ def test_squares_seq():
     assert squares.seq().list()[:11] == [0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
 
 
-def test_squares_every():
-    assert squares.every(3)[:4] == [0, 9, 36, 81]
-
-
 def test_squares_between():
-    assert squares.between(2, 37) == [4, 9, 16, 25, 36]
+    assert squares.seq().between(2, 37).list()[:5] == [4, 9, 16, 25, 36]
 
 
 def test_squares_len():
@@ -282,12 +284,8 @@ def test_powers_3_seq():
     assert powers3.seq().list() == [0, 1, 8, 27, 64]
 
 
-def test_powers_every():
-    assert powers3.every(1)[:5] == [0, 1, 8, 27, 64]
-
-
 def test_powers_between():
-    assert powers3.between(2, 37) == [8, 27]
+    assert powers3.seq().between(2, 37).list()[:2] == [8, 27]
 
 
 def test_powers_len():
@@ -328,14 +326,9 @@ def test_recs_seq():
     assert fibs.seq().list()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 21]
 
 
-def test_recs_every():
-    assert recs.every(2)[:3] == [1, 4, 11]
-    assert fibs.every(4)[:3] == [0, 3, 21]
-
-
 def test_recs_between():
-    assert recs.between(2, 12) == [3, 4, 7, 11]
-    assert fibs.between(5, 13) == [5, 8, 13]
+    assert recs.seq().between(2, 12).list()[:4] == [3, 4, 7, 11]
+    assert fibs.seq().between(5, 13).list()[:3] == [5, 8, 13]
 
 
 def test_recs_len():
@@ -380,12 +373,9 @@ def test_happys_seq():
     assert happys.seq().list()[:5] == [1, 7, 10, 13, 19]
 
 
-def test_happys_every():
-    assert happys.every(2)[:3] == [1, 10, 19]
-
-
 def test_happys_between():
-    assert happys.between(11, 14) == [13]
+    assert happys.seq().between(11, 14).list()[:1] == [13]
+
 
 def test_happys_len():
     assert len(happys) == 11
@@ -423,15 +413,9 @@ def test_mults_seq():
     assert evens.seq().list()[:9] == [0, 2, 4, 6, 8, 10, 12, 14, 16]
 
 
-def test_mults_every():
-    assert mults.every(4)[:3] == [0, 20, 40]
-    assert evens.every(2)[:5] == [0, 4, 8, 12, 16]
-
-
 def test_mults_between():
-    assert mults.between(0, 21) == [0, 5, 10, 15, 20]
-    assert evens.between(1, 5) == [2, 4]
-
+    assert mults.seq().between(0, 21).list()[:5] == [0, 5, 10, 15, 20]
+    assert evens.seq().between(1, 5).list()[:2] == [2, 4]
 
 
 def test_mults_len():
@@ -479,19 +463,14 @@ def test_ariths_seq():
     assert odds.seq().list()[:7] == [1, 3, 5, 7, 9, 11, 13]
 
 
-def test_ariths_every():
-    assert ariths.every(3)[:2] == [2, 11]
-    assert odds.every(6)[:2] == [1, 13]
-
-
 def test_ariths_len():
     assert len(ariths) == 11
     assert len(odds) == 11
 
 
 def test_ariths_between():
-    assert ariths.between(12, 18) == [14, 17]
-    assert odds.between(14, 25) == [15, 17, 19, 21, 23, 25]
+    assert ariths.seq().between(12, 18).list() == [14, 17]
+    assert odds.seq().between(1, 18).list() == [1, 3, 5, 7, 9, 11, 13, 15, 17]
 
 
 def test_ariths_isa():
@@ -530,12 +509,8 @@ def test_geoms_seq():
     assert geoms.seq().list()[:6] == [2, 6, 18, 54, 162, 486]
 
 
-def test_geoms_every():
-    assert geoms.every(1)[:6] == [2, 6, 18, 54, 162, 486]
-
-
 def test_geoms_between():
-    assert geoms.between(54, 60) == [54]
+    assert geoms.seq().between(54, 60).list()[:1] == [54]
 
 
 def test_geoms_len():
@@ -570,17 +545,13 @@ def test_ndigits_seq():
     assert ndigits.seq().list()[:6] == [100, 101, 102, 103, 104, 105]
 
 
-def test_ndigits_every():
-    assert ndigits.every(5)[:2] == [100, 105]
-
-
 def test_ndigits_len():
-    assert len(ndigits) == 11
+    assert len(ndigits) == 501
 
 
 def test_ndigits_between():
-    assert ndigits.between(32, 56) == []
-    assert ndigits.between(234, 238) == [234, 235, 236, 237, 238]
+    assert ndigits.seq().between(32, 56).list()[:1] == []
+    assert ndigits.seq().between(234, 238).list()[:5] == [234, 235, 236, 237, 238]
 
 
 def test_ndigits_isa():
@@ -611,12 +582,8 @@ def test_facts_seq():
     assert facts.seq().list()[:6] == [1, 1, 2, 6, 24, 120]
 
 
-def test_facts_every():
-    assert facts.every(10)[:1] == [1]
-
-
 def test_facts_between():
-    assert facts.between(1, 6) == [1, 1, 2, 6]
+    assert facts.seq().between(1, 6).list() == [1, 1, 2, 6]
 
 
 def test_facts_len():
@@ -654,13 +621,8 @@ def test_polys_seq():
     assert triangs.seq().list()[:5] == [1, 3, 6, 10, 15]
 
 
-def test_polys_every():
-    assert polys.every(3)[:2] == [1, 22]
-    assert triangs.every(4)[:2] == [1, 15]
-
-
 def test_polys_between():
-    assert polys.between(4, 13) == [5, 12]
+    assert polys.seq().between(4, 13).list() == [5, 12]
 
 
 def test_polys_len():
@@ -702,6 +664,7 @@ def test_perfs():
     assert defics[1] == 2
     assert defics[4] == 5
 
+
 def test_perfs_len():
     assert len(perfs) == 4
     assert len(abunds) == 5
@@ -714,16 +677,10 @@ def test_perfs_seq():
     assert defics.seq().list()[:4] == [1, 2, 3, 4]
 
 
-def test_perfs_every():
-    assert perfs.every(3)[:1] == [6]
-    assert abunds.every(1)[:4] == [12, 18, 20, 24]
-    assert defics.every(5)[:4] == [1]
-
-
 def test_perfs_between():
-    assert perfs.between(0, 10) == [6]
-    assert abunds.between(11, 25) == [12, 18, 20, 24]
-    assert defics.between(3, 6) == [3, 4, 5]
+    assert perfs.seq().between(0, 10).list() == [6]
+    assert abunds.seq().between(11, 25).list() == [12, 18, 20, 24]
+    assert defics.seq().between(3, 6).list() == [3, 4, 5]
 
 
 def test_perfs_isa():
@@ -772,12 +729,8 @@ def test_palinds_seq():
     assert palinds.seq().list()[:11] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22]
 
 
-def test_palinds_every():
-    assert palinds.every(4)[:11] == [1, 5, 9]
-
-
 def test_palinds_between():
-    assert palinds.between(9, 15) == [9, 11]
+    assert palinds.seq().between(9, 15).list() == [9, 11]
 
 
 def test_palinds_isa():
@@ -822,16 +775,10 @@ def test_arbfuncs_seq():
     assert catnums.seq().list()[:10] == [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862]
 
 
-def test_arbfuncs_every():
-    assert arbfuncs.every(2)[:3] == [-1, 9, 27]
-    assert lazcats.every(3)[:2] == [1, 7]
-    assert catnums.every(4)[:3] == [1, 14, 1430]
-
-
 def test_arbfuncs_between():
-    assert arbfuncs.between(-2, 17) == [-1, 3, 9, 17]
-    assert lazcats.between(-2, 0) == []
-    assert catnums.between(2, 1500) == [2, 5, 14, 42, 132, 429, 1430]
+    assert arbfuncs.seq().between(-2, 17).list() == [-1, 3, 9, 17]
+    assert lazcats.seq().between(-2, 0).list() == []
+    assert catnums.seq().between(2, 1500).list() == [2, 5, 14, 42, 132, 429, 1430]
 
 
 def test_arbfuncs_isa():
@@ -869,24 +816,21 @@ test Mersennes
 
 @with_setup(setup_mersennes)
 def test_mersennes():
-    assert mersennes[0] == 1
+    assert mersennes[0] == 0
     assert mersennes[1] == 1
     assert mersennes[4] == 15
+
 
 def test_mersennes_len():
     assert len(mersennes) == 11
 
 
 def test_mersennes_seq():
-    assert mersennes.seq().list()[:11] == [0, 1, 3, 7, 15]
-
-
-def test_mersennes_every():
-    assert mersennes.every(2)[:11] == [0, 3, 15]
+    assert mersennes.seq().list()[:5] == [0, 1, 3, 7, 15]
 
 
 def test_mersennes_between():
-    assert mersennes.between(1, 6) == [1, 3]
+    assert mersennes.seq().between(1, 6).list()[:2] == [1, 3]
 
 
 def test_mersennes_isa():
@@ -908,25 +852,21 @@ test merprimes
 
 
 @with_setup(setup_merprimes)
-def test_mersennes():
+def test_perimes():
     assert merprimes[0] == 2
     assert merprimes[1] == 3
-    assert merprimes[9] == 257
+    assert merprimes[9] == 89
 
 def test_merprimes_len():
     assert len(merprimes) == 11
 
 
 def test_merprimes_seq():
-    assert merprimes.seq().list()[:10] == [2, 3, 5, 7, 13, 17, 19, 67, 127, 257]
-
-
-def test_merprimes_every():
-    assert merprimes.every(4)[:3] == [2, 13, 127]
+    assert merprimes.seq().list()[:10] == [2, 3, 5, 7, 13, 17, 19, 31, 61, 89]
 
 
 def test_merprimes_between():
-    assert merprimes.between(-5, 0) == []
+    assert merprimes.seq().between(-5, 0).list() == []
 
 
 def test_merprimes_isa():
@@ -961,12 +901,8 @@ def test_looksays_seq():
     assert looksays.seq().list()[:6] == [1, 11, 21, 1211, 111221, 312211]
 
 
-def test_looksays_every():
-    assert looksays.every(1)[:2] == [1]
-
-
 def test_looksays_between():
-    assert looksays.between(1000, 1500) == [1211]
+    assert looksays.seq().between(1000, 1500).list() == [1211]
 
 
 def test_looksays_isa():
@@ -1001,14 +937,10 @@ def test_pis_seq():
     assert pis.seq().list()[:6] == [3, 1, 4, 1, 5, 9]
 
 
-def test_pis_every():
-    assert pis.every(2)[:2] == [3, 1]
-
-
-def test_pis_isa():
-    assert pis.isa(2) == True
-    assert pis.isa(68) == False
-    assert pis.isa(0) == False
+# def test_pis_isa():
+#     assert pis.isa(2) == True
+#     assert pis.isa(68) == False
+#     assert pis.isa(0) == False
 
 
 @raises(TypeError)
@@ -1034,15 +966,12 @@ def test_harshads_len():
 
 
 def test_harshads_seq():
-    assert harshads.seq().list()[:6] == [1, 2, 3, 4, 5, 6, 7]
+    assert harshads.seq().list()[:7] == [1, 2, 3, 4, 5, 6, 7]
 
-
-def test_harshads_every():
-    assert harshads.every(3)[:5] == [1, 4, 7, 10, 20, 24, 30]
 
 
 def test_harshads_between():
-    assert harshads.between(5, 10) == [7, 10]
+    assert harshads.seq().between(5, 10).list()[0:6] == [5, 6, 7, 8, 9, 10]
 
 
 def test_harshads_isa():
@@ -1064,13 +993,13 @@ test intersection
 
 @with_setup(setup_intersection)
 def test_intersection():
-    assert intersection[0] == 2
-    assert intersection[1] == 3
-    assert intersection[3] == 13
+    assert intersection[0] == 7
+    assert intersection[1] == 13
+    assert intersection[3] == 23
 
 
-def test_intersection_seq
-    assert intersection.seq().list()[:3] == [2, 3, 5, 13]
+def test_intersection_seq():
+    assert intersection.seq().list()[0:4] == [7, 13, 19, 23]
 
 
 """
@@ -1082,12 +1011,12 @@ test union
 
 @with_setup(setup_union)
 def test_union():
-    assert union[0] == 0
-    assert union[1] == 1
-    assert union[7] == 11
+    assert union[0] == 1
+    assert union[1] == 2
+    assert union[7] == 13
 
 def test_union_seq():
-    assert union.seq().list()[:7] == [0, 1, 2, 3, 5, 7, 8, 11]
+    assert union.seq().list()[:7] == [1, 2, 3, 5, 7, 10, 11]
 
 
 """
@@ -1097,14 +1026,41 @@ test consecratios
 """
 
 
-@with_setup(setup_consecratio)
+@with_setup(setup_consecratios)
 def test_consecratio():
-    assert consecratios[0] == None
-    assert consecratios[1] == 1
-    assert consecratios[5] == 1.6
+    assert consecratios[0] == 7
+    assert consecratios[1] == 1.43
+    assert consecratios[2] == 1.3
 
 def test_consecratios_seq():
-    assert consecratios.seq().list()[:5] == [None, 1, 2, 1.5, 1.67, 1.6]
+    assert consecratios.seq().list()[:4] == [7, 1.43, 1.3, 1.46]
+
+
+
+"""
+------------------------------------------------------------------------------
+test every
+------------------------------------------------------------------------------
+"""
+
+
+@with_setup(setup_every)
+def test_every3():
+    assert every3[0] == 2
+    assert every3[1] == 7
+    assert every3[2] == 17
+
+def test_every3_seq():
+    assert every3.seq().list()[:4] == [2, 7, 17, 29]
+
+
+def test_every1():
+    assert every1[0] == 2
+    assert every1[1] == 3
+    assert every1[2] == 5
+
+def test_every1_seq():
+    assert every1.seq().list()[:4] == [2, 3, 5, 7]
 
 
 

@@ -13,7 +13,6 @@ Decorators
 ------------------------------------------------------------------------------
 """
 
-
 def timeit(interceptedFunction):
     """A decorator that intercepts a function and it's arguments *args
     and **kwargs times the duration of thefunction and then returns it
@@ -302,7 +301,6 @@ def consecratios(gen, d=2):
 
     while True:
         gen[n]
-        print gen[n]
         try:
             yield round(gen[n]*1.0/gen[n-1], d)
         except:
@@ -338,64 +336,64 @@ def every(gen, d):
         n += 1
 
 
-@genwrapper
-def primes():
-    """Generator to find the prime numbers
-
-    This uses the seive of Erathosens algorithm
-
-    :param name: None
-    :returns:  int -- the next prime number in the sequence.
-    :raises: AttributeError, KeyError
-
-    :Example:
-
-    This is called by using the wrapper function primes() to the
-    ExpandingSequence class.
-
-    >>> primes = primes()
-    >>> primes[5]
-    >>> primes.seq()
-    >>> len(primes)
-    11
-    [2, 3, 5, 7, 11]
-    5
-    """
-    candidate = 2
-    found = []
-    while True:
-        if all(candidate % prime != 0 for prime in found):
-            yield candidate
-            found.append(candidate)
-        candidate += 1
-
-
-@genwrapper
-def squares():
-    """Generator to find the square numbers
+# @genwrapper
+# def primes():
+#     """Generator to find the prime numbers
+#
+#     This uses the seive of Erathosens algorithm
+#
+#     :param name: None
+#     :returns:  int -- the next prime number in the sequence.
+#     :raises: AttributeError, KeyError
+#
+#     :Example:
+#
+#     This is called by using the wrapper function primes() to the
+#     ExpandingSequence class.
+#
+#     >>> primes = primes()
+#     >>> primes[5]
+#     >>> primes.seq()
+#     >>> len(primes)
+#     11
+#     [2, 3, 5, 7, 11]
+#     5
+#     """
+#     candidate = 2
+#     found = []
+#     while True:
+#         if all(candidate % prime != 0 for prime in found):
+#             yield candidate
+#             found.append(candidate)
+#         candidate += 1
 
 
-    :param name: None
-    :returns:  int -- the next square number in the sequence.
-    :raises: AttributeError, KeyError
-
-    :Example:
-
-    This is called by using the wrapper function squares() to the
-    ExpandingSequence class
-
-    >>> squares = squares()
-    >>> squares[5]
-    >>> squares.seq()
-    >>> len(squares)
-    16
-    [0, 1, 4, 9, 16]
-    5
-    """
-    candidate = 0
-    while True:
-        yield candidate*candidate
-        candidate += 1
+# @genwrapper
+# def squares():
+#     """Generator to find the square numbers
+#
+#
+#     :param name: None
+#     :returns:  int -- the next square number in the sequence.
+#     :raises: AttributeError, KeyError
+#
+#     :Example:
+#
+#     This is called by using the wrapper function squares() to the
+#     ExpandingSequence class
+#
+#     >>> squares = squares()
+#     >>> squares[5]
+#     >>> squares.seq()
+#     >>> len(squares)
+#     16
+#     [0, 1, 4, 9, 16]
+#     5
+#     """
+#     candidate = 0
+#     while True:
+#         yield candidate*candidate
+#         candidate += 1
 
 @genwrapper
 def powers(n):
@@ -831,78 +829,83 @@ def catnums():
     return arbfuncs(f)
 
 
-@genwrapper
-def mersennes(f):
-    """Generator to find the nth Mersenne number
-
-
-    :param name: None
-    :returns:  the next Mersenne number in the sequence
-
-    :Example:
-
-    >>> mersennes = mersennes()
-    >>> mersennes[4]
-    >>> mersennes.seq()
-    >>> len(mersennes)
-
-    15
-    [0, 1, 3, 7, 15]
-    4
-    """
-    n = 0
-    while True:
-        yield f(n)
-        n += 1
-
-
-@genwrapper
-def merprimes(f):
-    """Generator to find the nth Mercenne Prime number
-
-
-    :param name: None
-    :returns:  the next Mersenne Prime number in the sequence
-
-    :Example:
-
-    >>> merprimes = merprimes()
-    >>> merprimes[10]
-    >>> merprime.seq()
-    >>> len(merprime)
-
-    257
-    [2, 3, 5, 7, 13, 17, 19, 31, 67, 127, 257]
-    11
-    """
-
-    try:
-        primes[1]
-        mersennes[1]
-
-    except:
-        primes = primes()
-        mersennes = mersennes()
-
-    def ismerc(n):
-        if not primes.isa(n):
-                return False
-        if n == 1:
-                return False
-        if n == 2:
-                return True
-        m = mersennes[n]
-        x = 4
-        for i in range(n-2):
-                x = (x * x - 2) % m
-        return x == 0
-
-    candidate = 1
-
-    while True:
-        if ismerc(candidate):
-            yield candidate
-        candidate += 1
+# @genwrapper
+# def mersennes():
+#     """Generator to find the nth Mersenne number
+#
+#
+#     :param name: None
+#     :returns:  the next Mersenne number in the sequence
+#
+#     :Example:
+#
+#     >>> mersennes = mersennes()
+#     >>> mersennes[4]
+#     >>> mersennes.seq()
+#     >>> len(mersennes)
+#
+#     15
+#     [0, 1, 3, 7, 15]
+#     4
+#     """
+#     n = 0
+#     while True:
+#         yield 2**n - 1
+#         n += 1
+#
+#
+# @genwrapper
+# def merprimes(gen, gen2):
+#     """Generator to find the nth Mercenne Prime number
+#
+#
+#     :param name: None
+#     :returns:  the next Mersenne Prime number in the sequence
+#
+#     :Example:
+#
+#     >>> merprimes = merprimes()
+#     >>> merprimes[10]
+#     >>> merprime.seq()
+#     >>> len(merprime)
+#
+#     257
+#     [2, 3, 5, 7, 13, 17, 19, 31, 67, 127, 257]
+#     11
+#     """
+#
+#     # try:
+#     #     primes[1]
+#     # except:
+#     #     primes = primes()
+#     #     primes[1]
+#     # try:
+#     #     mersennes[1]
+#     # except:
+#     #     mersennes = mersennes()
+#     #     mersenmes[1]
+#     #primes = primes()
+#     gen[10]
+#     gen2[10]
+#     def ismerc(n):
+#         if not gen.isa(n):
+#                 return False
+#         if n == 1:
+#                 return False
+#         if n == 2:
+#                 return True
+#         m = gen2[n]
+#         x = 4
+#         for i in range(n-2):
+#                 x = (x * x - 2) % m
+#         return x == 0
+#
+#     candidate = 1
+#
+#     while True:
+#         if ismerc(candidate):
+#             yield candidate
+#         candidate += 1
 
 @genwrapper
 def mods(gen, div):
@@ -964,11 +967,16 @@ def looksays():
     5
     """
 
-    numberstring='1'
+    numberstring = 1
     while True:
-        numberstring = ''.join( str(len(list(g))) + k
-                    for k,g in groupby(numberstring) )
-        yield numberstring
+        if numberstring == 1:
+            numberstring = '1'
+            yield 1
+
+        else:
+            numberstring = ''.join( str(len(list(g))) + k
+                        for k,g in groupby(numberstring) )
+            yield int(numberstring)
 
 
 @genwrapper
@@ -1029,4 +1037,6 @@ def harshads():
     [1, 2, 3, 4, 5, 6, ,7]
     7
     """
-    yield (n for n in count(1) if n % sum(int(ch) for ch in str(n)) == 0)
+    for n in count(1):
+		if n % sum(int(ch) for ch in str(n)) == 0:
+			yield n
