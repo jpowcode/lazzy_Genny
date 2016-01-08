@@ -159,9 +159,44 @@ class Seq():
     def __str__(self):
         return str(self.seq)
 
-    def sort(self):
+    def sort(self, cmp=None, key=None, reverse=False):
         new = list(self.seq)
-        new.sort()
+        new.sort(cmp=None, key=None, reverse=False)
+        return Seq(new)
+
+    def append(self, x):
+        new = list(self.seq)
+        new.append(x)
+        return Seq(new)
+
+    def extend(self, L):
+        new = list(self.seq)
+        new.extend(L)
+        return Seq(new)
+
+    def insert(self, i, x):
+        new = list(self.seq)
+        new.insert(i, x)
+        return Seq(new)
+
+    def remove(self, x):
+        new = list(self.seq)
+        new.extend(x)
+        return Seq(new)
+
+    def pop(self, i):
+        new = list(self.seq)
+        new.extend(i)
+        return Seq(new)
+
+    def index(self, x):
+        new = list(self.seq)
+        new.extend(x)
+        return Seq(new)
+
+    def count(elf, x):
+        new = list(self.seq)
+        new.extend(x)
         return Seq(new)
 
     def reverse(self):
@@ -345,7 +380,7 @@ class Generators():
         >>> happyprimes = intersection(happys, primes)
         >>> happyprimes[100]
 
-        [7, 13, 19, 23, 31, 79, 97, 103, 109, 139, 167, 193, 239, 263, 293, 313,
+        [1, 7, 10, 13, 19, 23, 31, 79, 97, 103, 109, 139, 167, 193, 239, 263, 293, 313,
         331, 367, 379, 383, 397, 409, 487]
         """
 

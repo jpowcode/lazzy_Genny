@@ -189,6 +189,12 @@ def setup_every():
     every3[10]
     every1[10]
 
+def setup_others():
+    global A
+    global B
+    A = primes.seq()
+    B = happys.seq()
+
 """
 ------------------------------------------------------------------------------
 primes test
@@ -1061,6 +1067,22 @@ def test_every1():
 
 def test_every1_seq():
     assert every1.seq().list()[:4] == [2, 3, 5, 7]
+
+
+"""
+------------------------------------------------------------------------------
+test other list methods
+------------------------------------------------------------------------------
+"""
+
+@with_setup(setup_others)
+def test_append():
+    assert primes.seq().list()[:5] == [2, 3, 5, 7, 11]
+    assert happys.seq().list()[:5] == [1, 7, 10, 13, 19]
+    assert primes.seq().append(4).list()[:6] == [2, 3, 5, 7, 11, 4]
+
+def test_extend():
+    assert primes.seq().extend(happys.seq()).list()[:10] == [2, 3, 5, 7, 11, 1, 7, 10, 13, 19]
 
 
 
