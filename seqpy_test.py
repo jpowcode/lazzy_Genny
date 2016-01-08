@@ -1,7 +1,7 @@
 from nose import with_setup
 from nose.tools import raises
 from seqpy import *
-from generators import Generators
+#from generators import Generators
 
 """
 ------------------------------------------------------------------------------
@@ -39,8 +39,8 @@ def setup_recs():
     """
     global recs
     global fibs
-    recs = recs(0, 1, 3)
-    fibs = fibs(0)
+    recs = G.recs(0, 1, 3)
+    fibs = G.fibs(0)
     recs[10]
     fibs[10]
 
@@ -48,8 +48,8 @@ def setup_recs():
 def setup_mults():
     global mults
     global evens
-    mults = mults(5)
-    evens = evens()
+    mults = G.mults(5)
+    evens = G.evens()
     mults[10]
     evens[10]
 
@@ -57,41 +57,41 @@ def setup_mults():
 def setup_ariths():
     global ariths
     global odds
-    ariths = ariths(2, 3)
-    odds = odds()
+    ariths = G.ariths(2, 3)
+    odds = G.odds()
     ariths[10]
     odds[10]
 
 
 def setup_happys():
     global happys
-    happys = happys()
+    happys = G.happys()
     happys[10]
 
 
 def setup_geoms():
     global geoms
-    geoms = geoms(2, 3)
+    geoms = G.geoms(2, 3)
     geoms[10]
 
 
 def setup_ndigits():
     global ndigits
-    ndigits = ndigits(3)
+    ndigits = G.ndigits(3)
     ndigits[500]
 
 
 def setup_facts():
     global facts
-    facts = facts()
+    facts = G.facts()
     facts[10]
 
 
 def setup_polys():
     global polys
     global triangs
-    polys = polys(5)
-    triangs = triangs()
+    polys = G.polys(5)
+    triangs = G.triangs()
     polys[10]
     triangs[10]
 
@@ -100,9 +100,9 @@ def setup_perfs():
     global perfs
     global abunds
     global defics
-    perfs = perfs()
-    abunds = abunds()
-    defics = defics()
+    perfs = G.perfs()
+    abunds = G.abunds()
+    defics = G.defics()
     perfs[3]
     abunds[4]
     defics[4]
@@ -110,7 +110,7 @@ def setup_perfs():
 
 def setup_palinds():
     global palinds
-    palinds = palinds()
+    palinds = G.palinds()
     palinds[10]
 
 
@@ -119,9 +119,9 @@ def setup_arbfuncs():
     global arbfuncs
     global lazcats
     global catnums
-    arbfuncs = arbfuncs(f)
-    lazcats = lazcats()
-    catnums = catnums()
+    arbfuncs = G.arbfuncs(f)
+    lazcats = G.lazcats()
+    catnums = G.catnums()
     arbfuncs[10]
     lazcats[10]
     catnums[10]
@@ -141,51 +141,51 @@ def setup_merprimes():
 
 def setup_looksays():
     global looksays
-    looksays = looksays()
+    looksays = G.looksays()
     looksays[10]
 
 
 def setup_pis():
     global pis
-    pis = pis()
+    pis = G.pis()
     pis[10]
 
 
 def setup_harshads():
     global harshads
-    harshads = harshads()
+    harshads = G.harshads()
     harshads[10]
 
 
 def setup_consecratios():
     global consecratios
-    consecratios = consecratios(happys, 2)
+    consecratios = G.consecratios(happys, 2)
     consecratios[10]
 
 
 def setup_intersection():
     global intersection
-    intersection = intersection(happys, primes)
+    intersection = G.intersection(happys, primes)
     intersection[10]
 
 
 def setup_union():
     global union
-    union = union(happys, primes)
+    union = G.union(happys, primes)
     union[10]
 
 
 def setup_mods():
     global mods
-    mods = mods(happys, 3)
+    mods = G.mods(happys, 3)
     mods[10]
 
 
 def setup_every():
     global every3
     global every1
-    every3 = every(primes, 3)
-    every1 = every(primes, 1)
+    every3 = G.every(primes, 3)
+    every1 = G.every(primes, 1)
     every3[10]
     every1[10]
 
@@ -267,19 +267,19 @@ powers test
 @with_setup(setup_powers)
 def test_powers_0p0():
     global powers0
-    powers0 = powers(0)
+    powers0 = G.powers(0)
     powers0[5]
 #    assert powers0[0] == 0
     assert powers0[1] == 1
     global powers1
-    powers1 = powers(1)
+    powers1 = G.powers(1)
     assert powers1[1] == 1
     assert powers1[2] == 2
 
 
 def test_powers_3_seq():
     global powers3
-    powers3 = powers(3)
+    powers3 = G.powers(3)
     powers3[4]
     assert powers3.seq().list() == [0, 1, 8, 27, 64]
 
@@ -290,7 +290,7 @@ def test_powers_between():
 
 def test_powers_len():
     global powers7
-    powers7 = powers(7)
+    powers7 = G.powers(7)
     powers7[32]
     assert len(powers7) == 33
 
