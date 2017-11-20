@@ -1,54 +1,55 @@
+"""
+Library to experiment with mathematical sequences
+Author: jpowcode
+"""
 from collections import Sequence
 from functools import wraps
 from datetime import datetime as dt
 from math import factorial
-from itertools import groupby, count, islice
+from itertools import groupby, count
+from multiprocessing import Pool
+import sys
 import logging
 
-logging.basicConfig(format='%(message)s',level=logging.NOTSET)
+# detect python version
+if sys.version_info[0] < 3:
+    version = 2
+else:
+    version = 3
 
-"""
-------------------------------------------------------------------------------
-Decorators
-------------------------------------------------------------------------------
-"""
+logging.basicConfig(format='%(message)s', level=logging.NOTSET)
 
 
-def timeit(interceptedFunction):
+def timeit(intercepted_function):
     """A decorator that intercepts a function and it's arguments *args
     and **kwargs times the duration of thefunction and then returns it
     and logs it to the terminal
     """
 
-    @wraps(interceptedFunction)
+    @wraps(intercepted_function)
     def timer(*args, **kwargs):
-        functionName = interceptedFunction.func_name
+        function_name = intercepted_function.func_name
         start = dt.now()
-        actualResult = interceptedFunction(*args, **kwargs)
+        actual_result = intercepted_function(*args, **kwargs)
         stop = dt.now()
-        executionTime = stop - start
+        execution_time = stop - start
         logging.debug('Function: [{fnc}] => Took [{timed}]'
-                      .format(fnc=functionName, timed=executionTime))
+                      .format(fnc=function_name, timed=execution_time))
 
-        return actualResult
+        return actual_result
 
     return timer
 
 
-def genwrapper(interceptedFunction):
+def genwrapper(intercepted_function):
     """A decorator to wrap the get_ functions below into a usable form
     """
-    @wraps(interceptedFunction)
+    @wraps(intercepted_function)
     def wrapper(*args, **kwargs):
-        actualResult = ExpandingSequence(interceptedFunction(*args, **kwargs))
-        return actualResult
+        actual_result = ExpandingSequence(intercepted_function(*args, **kwargs))
+        return actual_result
     return wrapper
 
-"""
-------------------------------------------------------------------------------
-Sequence containers
-------------------------------------------------------------------------------
-"""
 
 class ExpandingSequence(Sequence):
     """A container class to add methods to the generator functions.
@@ -75,7 +76,6 @@ class ExpandingSequence(Sequence):
         """
         self.it = it
         self._cache = []
-
 
     def __getitem__(self, index):
         """Gets the next value from the generator function.
@@ -122,12 +122,15 @@ class ExpandingSequence(Sequence):
         """
         return Seq(self._cache)
 
-
-    def isa(self, num):
-        """Gets the next value from the generator function.
+    def isa(self, num, limit=100):
+        """Checks whether a number is in a particular sequence. Need to be
+        careful with this as just because it is not in the current generated
+        numbers does not mean it won't be if more numbers are generated.
 
         :param name: num.
         :type name: int.
+        :param name: limit
+        :type name: iint -- maximum number of terms to search
         :returns:  bool -- True is num is in the sequence
 
         :Example:
@@ -138,26 +141,45 @@ class ExpandingSequence(Sequence):
         >>> happys.isa(19)
         True
         """
-        if not self._cache:     #check if cache is empty to avoid errors
+
+        if not self._cache:     # check if cache is empty to avoid errors
             self._cache.append(next(self.it))
-        while self._cache[-1] < num:
-            self._cache.append(next(self.it))
+
+        extras = limit - len(self._cache)  # check the existing length of cache
+        if extras > 0:                     # generate more if needed
+            for _ in range(extras+1):
+                self._cache.append(next(self.it))
+
         if num in self._cache:
             return True
         else:
             return False
 
+
 class Seq():
     """Constructs an object that holds a list and collection of methods for
-    filtering and opperating on the list. The difference between this and a list
-    is that it is imutable. The origonal list will not be changed. The generator
-    function will output an object of this type when the .seq method is called
+    filtering and opperating on the list. The difference between this and a
+    list is that it is imutable. The origonal list will not be changed. The
+    generator function will output an object of this type when the .seq
+    method is called
     """
     def __init__(self, seq):
         self.seq = seq
 
     def __str__(self):
         return str(self.seq)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __repr__(self):
+        return 'ImmutableList(' + str(self) + ')'
+
+    def __eq__(self, other):
+        if self.seq == other:
+            return True
+        else:
+            return False
 
     def sort(self, cmp=None, key=None, reverse=False):
         new = list(self.seq)
@@ -171,7 +193,7 @@ class Seq():
 
     def extend(self, L):
         new = list(self.seq)
-        new.extend(L)
+        new.extend(list(L.seq))
         return Seq(new)
 
     def insert(self, i, x):
@@ -181,23 +203,22 @@ class Seq():
 
     def remove(self, x):
         new = list(self.seq)
-        new.extend(x)
+        new.remove(x)
         return Seq(new)
 
     def pop(self, i):
         new = list(self.seq)
-        new.extend(i)
+        new.pop(i)
         return Seq(new)
 
     def index(self, x):
         new = list(self.seq)
-        new.extend(x)
+        new.index(x)
         return Seq(new)
 
-    def count(elf, x):
+    def count(self, x):
         new = list(self.seq)
-        new.extend(x)
-        return Seq(new)
+        return new.count(x)
 
     def reverse(self):
         new = list(self.seq)
@@ -207,7 +228,12 @@ class Seq():
     def between(self, a, b):
         new = list(self.seq)
         if len(new) > 0:
-            return Seq(filter(lambda x: a <= x <= b, new))
+            if version == 2:
+                return Seq(filter(lambda x: a <= x <= b, new))
+            else:
+                # python 3 version of filter returns an itertor and we need a
+                # list.
+                return Seq(list(filter(lambda x: a <= x <= b, new)))
         else:
             return Seq(new)
 
@@ -217,14 +243,8 @@ class Seq():
     def len(self):
         return len(self.seq)
 
-
-
-"""
-
-------------------------------------------------------------------------------
-Generator Functions
-------------------------------------------------------------------------------
-"""
+    def sum(self):
+        return sum(self.seq)
 
 
 class Generators():
@@ -301,35 +321,34 @@ class Generators():
         11
         """
 
-        try:
-            self.primes[1]
-        except:
-            self.primes = self.primes()
-            self.primes[1]
-        try:
-            self.mersennes[1]
-        except:
-            self.mersennes = self.mersennes()
-            self.mersennes[1]
+        def isprime(n):
+            if n == 1:
+                return False
+            dv = 2
+            while dv * dv <= n:
+                if n % dv == 0:
+                    return False
+                dv = dv + 1
+            return True
 
         def ismerc(n):
-            if not self.primes.isa(n):
-                    return False
+            if not isprime(n):
+                return False
             if n == 1:
-                    return False
+                return False
             if n == 2:
-                    return True
-            m = self.mersennes[n]
+                return True
+            m = 2**n - 1
             x = 4
             for i in range(n-2):
-                    x = (x * x - 2) % m
+                x = (x * x - 2) % m
             return x == 0
 
         candidate = 1
 
         while True:
             if ismerc(candidate):
-                yield candidate
+                yield 2**candidate - 1
             candidate += 1
 
     @genwrapper
@@ -380,8 +399,8 @@ class Generators():
         >>> happyprimes = intersection(happys, primes)
         >>> happyprimes[100]
 
-        [1, 7, 10, 13, 19, 23, 31, 79, 97, 103, 109, 139, 167, 193, 239, 263, 293, 313,
-        331, 367, 379, 383, 397, 409, 487]
+        [1, 7, 10, 13, 19, 23, 31, 79, 97, 103, 109, 139, 167, 193, 239, 263,
+        293, 313, 331, 367, 379, 383, 397, 409, 487]
         """
 
         gens = []
@@ -397,7 +416,8 @@ class Generators():
         while True:
             logic = True
             for gen in gens:
-                logic = logic * gen.isa(candidate) # if one evaluates to false logic is false
+                logic = logic * gen.isa(candidate)
+                # if one evaluates to false logic is false
             if logic:
                 yield candidate
 
@@ -436,7 +456,8 @@ class Generators():
         while True:
             logic = False
             for gen in gens:
-                logic = logic + gen.isa(candidate) # if one evaluates to false logic is false
+                logic = logic + gen.isa(candidate)
+                # if one evaluates to false logic is false
             if logic:
                 yield candidate
 
@@ -466,7 +487,7 @@ class Generators():
         [1.5, 1.67, 1.4, 1.57]
         5
         """
-        n=1
+        n = 1
         try:
             gen[n]
         except:
@@ -478,7 +499,7 @@ class Generators():
                 yield round(gen[n]*1.0/gen[n-1], d)
             except:
                 yield None
-            n +=1
+            n += 1
 
     @genwrapper
     def every(self, gen, d):
@@ -534,7 +555,7 @@ class Generators():
             candidate += 1
 
     @genwrapper
-    def recs(self, n, a, b):
+    def recs(self, a, b):
         """Generator to find arbitrary recursive sequences.
 
         These are seuences that add the previous two terms in the sequence
@@ -546,8 +567,6 @@ class Generators():
         1+2 = 3
         2+3 = 5
 
-        :param name: n
-        :param type: int -- the nth number of the sequence
         :param name: a
         :param type: int -- the first term in the sequence
         :param name: b
@@ -566,15 +585,16 @@ class Generators():
         [0, 1, 1, 2, 3]
         5
         """
+        n = 0
         while True:
             yield a
             a, b, n = b, a+b, n-1
 
-    def fibs(self, n):
+    def fibs(self):
         """A wrapper function, creates an object using ExpandingSequence
         class
         """
-        return self.recs(n, 0, 1)
+        return self.recs(0, 1)
 
     @genwrapper
     def happys(self):
@@ -823,9 +843,17 @@ class Generators():
         candidate = 1
         while True:
             total = 0
-            for i in xrange(1, candidate):
-                if candidate % i == 0:
-                    total += i
+
+            if version == 2:
+                for i in xrange(1, candidate):
+                    if candidate % i == 0:
+                        total += i
+            else:
+                # python 3 does not have xrange. range is equivalent
+                for i in range(1, candidate):
+                    if candidate % i == 0:
+                        total += i
+
             if dpa == 'd' and total < candidate:
                 yield candidate
             if dpa == 'p' and total == candidate:
@@ -913,7 +941,7 @@ class Generators():
         """A wrapper function, creates an object using ExpandingSequence
         class
         """
-        f = lambda n: (n**2 + n +2) / 2
+        f = lambda n: (n**2 + n + 2) / 2
         return self.arbfuncs(f)
 
     def catnums(self):
@@ -962,7 +990,6 @@ class Generators():
             yield gen[n] % div
             n += 1
 
-
     @genwrapper
     def looksays(self):
         """Generator to find the look and say sequence
@@ -990,10 +1017,9 @@ class Generators():
                 yield 1
 
             else:
-                numberstring = ''.join( str(len(list(g))) + k
-                            for k,g in groupby(numberstring) )
+                numberstring = ''.join(str(len(list(g))) + k
+                                       for k, g in groupby(numberstring))
                 yield int(numberstring)
-
 
     @genwrapper
     def pis(self):
@@ -1017,22 +1043,21 @@ class Generators():
 
         q, r, t, k, n, l = 1, 0, 1, 1, 3, 3
         while True:
-            if 4*q+r-t < n*t:
+            if 4*q + r - t < n*t:
                 yield n
-                nr = 10*(r-n*t)
-                n  = ((10*(3*q+r))//t)-10*n
-                q  *= 10
-                r  = nr
+                nr = 10*(r - n * t)
+                n = ((10*(3*q + r))//t) - 10*n
+                q *= 10
+                r = nr
             else:
                 nr = (2*q+r)*l
                 nn = (q*(7*k)+2+(r*l))//(t*l)
-                q  *= k
-                t  *= l
-                l  += 2
+                q *= k
+                t *= l
+                l += 2
                 k += 1
-                n  = nn
-                r  = nr
-
+                n = nn
+                r = nr
 
     @genwrapper
     def harshads(self):
@@ -1054,5 +1079,50 @@ class Generators():
         7
         """
         for n in count(1):
-    		if n % sum(int(ch) for ch in str(n)) == 0:
-    			yield n
+            if n % sum(int(ch) for ch in str(n)) == 0:
+                yield n
+
+
+class MultiThread():
+    """A class to allow running generators in separate threads.
+
+    :param name: num_threads
+    :type name: int -- the number of threads to use
+
+    :Example:
+
+    The following example sets the primes and happys to be generated
+    in seaprate threads.
+
+    >>> G = Generators()
+    >>> primes = G.primes()
+    >>> happys = G.happys()
+    >>> T = MultiThread(2)
+    >>> T.run([primes[10000], happys[10000]])
+    >>> print primes[10000]
+    >>> print happys[10000]
+    """
+    def __init__(self, num_threads):
+        self.num_threads = num_threads
+        self.run_thread = self.call_gen(self)
+        self.pool = Pool(self.num_threads)
+
+    def call_gen(self, g):
+        """A wrapper to run the generators when called from
+        the map function
+        """
+        g
+
+    def run(self, generators):
+        """A class to allow running generators in separate threads.
+
+        :param name: generators
+        :type name: list -- of generators
+
+        Example
+
+        >>> run([primes[100], happys[100]])
+        """
+        self.pool.map(self.run_thread, generators)
+        self.pool.close()
+        self.pool.join()
