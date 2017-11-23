@@ -6,21 +6,6 @@ from ddt import ddt, data, unpack
 
 G = Generators()
 
-def setup_powers():
-    pass
-
-
-def setup_recs():
-    """ Uses sequence 1, 3, 4, 7, 11, 18
-    """
-    global recs
-    global fibs
-    recs = G.recs(1, 3)
-    fibs = G.fibs()
-    recs[10]
-    fibs[10]
-
-
 def setup_mults():
     global mults
     global evens
@@ -37,12 +22,6 @@ def setup_ariths():
     odds = G.odds()
     ariths[10]
     odds[10]
-
-
-def setup_happys():
-    global happys
-    happys = G.happys()
-    happys[10]
 
 
 def setup_geoms():
@@ -248,139 +227,124 @@ class test_squares(unittest.TestCase):
         self.squares[0.5]
 
 
-# """
-# ------------------------------------------------------------------------------
-# powers test
-# ------------------------------------------------------------------------------
-# """
-#
-#
-# @with_setup(setup_powers)
-# def test_powers_0p0():
-#     global powers0
-#     powers0 = G.powers(0)
-#     powers0[5]
-#     assert powers0[0] == 1
-#     assert powers0[1] == 1
-#     global powers1
-#     powers1 = G.powers(1)
-#     assert powers1[1] == 1
-#     assert powers1[2] == 2
-#
-#
-# def test_powers_3_seq():
-#     global powers3
-#     powers3 = G.powers(3)
-#     powers3[4]
-#     assert powers3.seq().list() == [0, 1, 8, 27, 64]
-#
-#
-# def test_powers_between():
-#     assert powers3.seq().between(2, 37).list()[:2] == [8, 27]
-#
-#
-# def test_powers_len():
-#     global powers7
-#     powers7 = G.powers(7)
-#     powers7[32]
-#     assert len(powers7) == 33
-#
-#
-# def test_primes_isa():
-#     assert powers7.isa(128) == True
-#     assert powers3.isa(127) == False
-#
-#
-# @raises(TypeError)
-# def test_powers_raises_type_error():
-#     powers7[0.5]
-#
-# """
-# ------------------------------------------------------------------------------
-# recs test
-# ------------------------------------------------------------------------------
-# """
-#
-#
-# @with_setup(setup_recs)
-# def test_recs():
-#     assert recs[0] == 1
-#     assert recs[1] == 3
-#     assert recs[5] == 18
-#     assert fibs[0] == 0
-#     assert fibs[1] == 1
-#     assert fibs[4] == 3
-#
-#
-# def test_recs_seq():
-#     assert recs.seq().list()[:5] == [1, 3, 4, 7, 11]
-#     assert fibs.seq().list()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 21]
-#
-#
-# def test_recs_between():
-#     assert recs.seq().between(2, 12).list()[:4] == [3, 4, 7, 11]
-#     assert fibs.seq().between(5, 13).list()[:3] == [5, 8, 13]
-#
-#
-# def test_recs_len():
-#     assert len(recs) == 11
-#     assert len(fibs) == 11
-#
-#
-# def test_recs_isa():
-#     assert recs.isa(3) == True
-#     assert recs.isa(8) == False
-#     assert recs.isa(50) == False
-#     assert fibs.isa(8) == True
-#     assert fibs.isa(4) == False
-#     assert fibs.isa(45) == False
-#
-#
-# @raises(TypeError)
-# def test_recs_raises_type_error():
-#     recs[0.5]
-#
-#
-# @raises(TypeError)
-# def test_fibs_raises_type_error():
-#     fibs[0.5]
-#
-#
-# """
-# ------------------------------------------------------------------------------
-# happys test
-# ------------------------------------------------------------------------------
-# """
-#
-#
-# @with_setup(setup_happys)
-# def test_happys():
-#     assert happys[0] == 1
-#     assert happys[1] == 7
-#     assert happys[4] == 19
-#
-#
-# def test_happys_seq():
-#     assert happys.seq().list()[:5] == [1, 7, 10, 13, 19]
-#
-#
-# def test_happys_between():
-#     assert happys.seq().between(11, 14).list()[:1] == [13]
-#
-#
-# def test_happys_len():
-#     assert len(happys) == 11
-#
-#
-# def test_happys_isa():
-#     assert happys.isa(7) == True
-#     assert happys.isa(8) == False
-#     assert happys.isa(50) == False
-#
-#
-# @raises(TypeError)
-# def test_happys_raises_type_error():
-#     happys[0.5]
+@ddt
+class test_powers(unittest.TestCase):
+
+    powers0 = G.powers(0)
+    powers1 = G.powers(1)
+    powers3 = G.powers(3)
+    powers7 = G.powers(7)
+    powers0[5]
+    powers7[10]
+
+    def test_powers_len(self):
+        self.assertTrue(len(self.powers0) == 10)
+
+    @data((0, 1), (1, 1), (2, 1))
+    @unpack
+    def test_powers0(self, first_value, second_value):
+        self.assertTrue(self.powers0[first_value] == second_value)
+
+    @data((1, 1), (2, 2), (3, 3))
+    @unpack
+    def test_powers1(self, first_value, second_value):
+        self.assertTrue(self.powers1[first_value] == second_value)
+
+    def test_powers_seq(self):
+        self.assertTrue(self.powers3.seq().list() == [0, 1, 8, 7, 54])
+
+    @data(128, 7, 49)
+    def test_powers_isa_true(self, value):
+        self.assertTrue(self.powers7.isa(value))
+
+    @data(3, 8, 37)
+    def test_powers_isa_false(self, value):
+        self.assertFalse(self.powers7.isa(value))
+
+    @raises(TypeError)
+    def test_powers_raises_type_error(self):
+        self.powers0[0.5]
+
+
+@ddt
+class test_recs(unittest.TestCase):
+
+    recs = G.recs(1, 3)
+    fibs = G.fibs()
+    recs[10]
+    fibs[10]
+
+
+    def test_recs_len(self):
+        self.assertTrue(len(self.recs) == 10)
+
+    @data((0, 1), (1, 3), (5, 18))
+    @unpack
+    def test_recs(self, first_value, second_value):
+        self.assertTrue(self.recs[first_value] == second_value)
+
+    @data((0, 0), (1, 1), (4, 3))
+    @unpack
+    def test_fibs(self, first_value, second_value):
+        self.assertTrue(self.fibs[first_value] == second_value)
+
+
+    def test_recs_seq(self):
+        self.assertTrue(self.recs.seq().list()[:5] == [1, 3, 4, 7, 11])
+
+    def test_fibs_seq(self):
+        self.assertTrue(self.fibs.seq().list()[:9] == [0, 1, 1, 2, 3, 5, 8, 13, 21])
+
+    def test_recs_between(self):
+         self.assertTrue(self.recs.seq().between(2, 12).list()[:4] == [3, 4, 7, 11])
+         self.assertTrue(self.fibs.seq().between(5, 13).list()[:3] == [5, 8, 13])
+
+    @data(3, 8)
+    def test_recs_isa_true(self, value):
+        self.assertTrue(self.recs.isa(value))
+
+    @data(8, 50, 4, 45)
+    def test_recs_isa_false(self, value):
+        self.assertFalse(self.recs.isa(value))
+
+    @raises(TypeError)
+    def test_recs_raises_type_error(self):
+        self.recs[0.5]
+
+    @raises(TypeError)
+    def test_fibs_raises_type_error(self):
+        self.fibs[0.5]
+
+
+@ddt
+class test_happys(unittest.TestCase):
+
+    happys = G.happys()
+    happys[10]
+
+    def test_happys_len(self):
+        self.assertTrue(len(self.happys) == 10)
+
+    @data((0, 1), (1, 7), (4, 19))
+    @unpack
+    def test_happys(self, first_value, second_value):
+        self.assertTrue(self.happys[first_value] == second_value)
+
+    def test_happys_seq(self):
+        self.assertTrue(self.happys.seq().list()[:5] == [1, 7, 10, 13, 19])
+
+    @data(0, 7)
+    def test_happys_isa_true(self, value):
+        self.assertTrue(self.happys.isa(value))
+
+    @data(8, 50)
+    def test_happys_isa_false(self, value):
+        self.assertFalse(self.happys.isa(value))
+
+    @raises(TypeError)
+    def test_happys_raises_type_error(self):
+        self.happys[0.5]
+
 #
 # """
 # ------------------------------------------------------------------------------
