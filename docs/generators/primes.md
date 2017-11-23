@@ -2,13 +2,6 @@
 
 Generator to find the prime numbers using the sieve of Erathosenes algorithm.
 
-    :param name: None
-    :returns:  int -- the next prime number in the sequence.
-    :raises: AttributeError, KeyError
-
-  This is called by using the wrapper function primes() to the
-  ExpandingSequence class.
-
 ####Example
 
     >>> primes = primes()
