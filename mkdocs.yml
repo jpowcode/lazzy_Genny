@@ -1,0 +1,48 @@
+site_name: lazy_Genny
+theme: readthedocs
+pages:
+  - Introduction: 'index.md'
+  - About: 'about.md'
+  - Generators:
+      - primes: 'generators/primes.md'
+      - abunds: 'generators/abunds.md'
+      - consecratios: 'generators/consecratios.md'
+      - facts:  'generators/facts.md'
+      - harshads: 'generators/harshads.md'
+      - merprimes:  'generators/merprimes.md'
+      - ndigits: 'generators/ndigits.md'
+      - pis: 'generators/pis.md'
+      - recs: 'generators/recs.md'
+      - union: 'generators/union.md'
+      - arbfuncs: 'generators/arbfuncs.md'
+      - defics: 'generators/defics.md'
+      - fibs: 'generators/fibs.md'
+      - intersection: 'generators/intersection.md'
+      - mersennes: 'generators/mersennes.md'
+      - odds: 'generators/odds.md'
+      - polys: 'generators/polys.md'
+      - squares: 'generators/squares.md'
+      - ariths: 'generators/ariths.md'
+      - evens: 'generators/evens.md'
+      - geoms: 'generators/geoms.md'
+      - lazcats: 'generators/lazcats.md'
+      - mods: 'generators/mods.md'
+      - palinds: 'generators/palinds.md'
+      - powers: 'generators/powers.md'
+      - sumfacts: 'generators/sumfacts.md'
+      - catnums: 'generators/catnums.md'
+      - every: 'generators/every.md'
+      - happys: 'generators/happys.md'
+      - looksays: 'generators/looksays.md'
+      - mults: 'generators/mults.md'
+      - perfs: 'generators/perfs.md'
+      - primes: 'generators/primes.md'
+      - triangs: 'generators/triangs.md'
+
+
+  - Examples: 'examples.md'
+
+
+markdown_extensions:
+    - toc:
+        permalink: True
